@@ -1,0 +1,56 @@
+# Gradle specific files
+.gradle/
+build/
+out/
+!gradle-wrapper.jar
+
+# IntelliJ IDEA specific files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# VS Code specific files
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+*.swp
+
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Spring Boot specific files
+application-*.yml
+application-*.properties
+spring.log
+
+# SQLite database file
+*.db
+
+# Docker specific files
+*.pid
+.env
+
+# Test reports and results
+test-results/
+*.coverage
+
+# Gradle Wrapper
+.gradle/
+gradle-app.settings
+
+# Other files to ignore
+*.class
+*.jar
+*.war
+*.ear
+!build/libs/*.jar  # Ignore all jars except built outputs if needed for deployment
