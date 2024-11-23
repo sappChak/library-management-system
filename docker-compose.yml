@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: bookstore 
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./data:/app/data 
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:sqlite:/app/data/app.db
+      SPRING_DATASOURCE_DRIVER_CLASS_NAME: org.sqlite.JDBC
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+    restart: unless-stopped
+
