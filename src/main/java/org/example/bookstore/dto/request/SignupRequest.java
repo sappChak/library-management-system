@@ -2,6 +2,8 @@ package org.example.bookstore.dto.request;
 
 import org.example.bookstore.annotations.PasswordMatches;
 import org.example.bookstore.annotations.ValidEmail;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -14,18 +16,24 @@ import lombok.NoArgsConstructor;
 @PasswordMatches
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Request object for user registration")
 public class SignupRequest {
 
     @Email(message = "Invalid email format")
     @NotBlank(message = "User email is required")
     @ValidEmail
+    @Schema(description = "User's email address", example = "example@domain.com")
     private String email;
 
     @NotEmpty(message = "Please enter your username")
+    @Schema(description = "Username for the new user", example = "john_doe")
     private String username;
 
     @NotEmpty(message = "Password is required")
-    @Size(min = 6)
+    @Size(min = 6, message = "Password must be at least 6 characters long")
+    @Schema(description = "Password for the new account", example = "securePassword123")
     private String password;
+
+    @Schema(description = "Password confirmation for the new account", example = "securePassword123")
     private String confirmPassword;
 }

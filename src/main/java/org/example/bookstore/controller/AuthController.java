@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -27,6 +29,7 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/auth")
 @PreAuthorize("permitAll()")
 @RequiredArgsConstructor
+@Tag(name = "Authentication", description = "Endpoints for user authentication and registration")
 public class AuthController {
 
     private final JwtTokenProvider jwtTokenProvider;
@@ -34,6 +37,7 @@ public class AuthController {
     private final ResponseErrorValidation responseErrorValidation;
     private final UserService userService;
 
+    @Operation(summary = "Login user", description = "Login user with username and password")
     @PostMapping("/login")
     public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginRequest loginRequest,
             BindingResult bindingResult) {
@@ -46,13 +50,13 @@ public class AuthController {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()));
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        String jwt = "Bearer " + jwtTokenProvider.generateToken(authentication);
 
+        String jwt = "Bearer " + jwtTokenProvider.generateToken(authentication);
         return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwt));
     }
 
+    @Operation(summary = "Register user", description = "Register user with username, email and password")
     @PostMapping("/register")
     public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest,
             BindingResult bindingResult) {
