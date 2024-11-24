@@ -1,4 +1,4 @@
-package org.example.bookstore.domain;
+package org.example.bookstore.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -7,11 +7,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "roles")
-public class Role {
+@Table(name = "books")
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    private Long bookId;
 
-    private String roleName;
+    private String title;
+    private String author;
+    private String isbn;
+    private Integer availableCopies;
 }

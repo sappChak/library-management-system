@@ -1,4 +1,4 @@
-package org.example.bookstore.domain;
+package org.example.bookstore.entity;
 
 import java.time.LocalDateTime;
 
@@ -11,16 +11,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "refresh_tokens")
-public class RefreshToken {
+@Table(name = "transactions")
+public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long tokenId;
+    private Long transactionId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    private String refreshToken;
-    private LocalDateTime expiryDate;
+    @ManyToOne
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+
+    private String action;
+    private LocalDateTime date;
 }
