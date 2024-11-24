@@ -6,14 +6,14 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.hibernate.validator.internal.constraintvalidators.bv.EmailValidator;
+import org.example.bookstore.validations.EmailValidation;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
 @Target({ ElementType.TYPE, ElementType.FIELD, ElementType.ANNOTATION_TYPE })
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = EmailValidator.class)
+@Constraint(validatedBy = EmailValidation.class)
 @Documented
 public @interface ValidEmail {
 
