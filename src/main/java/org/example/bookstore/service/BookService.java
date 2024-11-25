@@ -3,6 +3,7 @@ package org.example.bookstore.service;
 import java.util.List;
 
 import org.example.bookstore.entity.Book;
+import org.example.bookstore.entity.Transaction;
 import org.example.bookstore.entity.enums.ActionType;
 import org.example.bookstore.repository.BookRepository;
 import org.springframework.stereotype.Service;
@@ -63,7 +64,7 @@ public class BookService {
     public List<Book> getBorrowedBooks(Long userId) {
         return transactionService.getTransactionsByUserId(userId).stream()
                 .filter(transaction -> transaction.getAction() == ActionType.BORROW)
-                .map(transaction -> transaction.getBook())
+                .map(Transaction::getBook)
                 .toList();
     }
 

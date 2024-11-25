@@ -35,28 +35,28 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
-    @PostMapping
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
+    @PostMapping
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
         Book book = bookService.addBook(bookMapper.toEntity(createBookRequest));
         return ResponseEntity.status(HttpStatus.CREATED).body(bookMapper.toResponseDto(book));
     }
 
+    @Operation(summary = "Get all books", description = "Retrieve a list of all books in the library.")
     @RolesAllowed("ADMIN")
     @GetMapping
-    @Operation(summary = "Get all books", description = "Retrieve a list of all books in the library.")
     public ResponseEntity<List<GetBookResponse>> getAllBooks() {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getAllBooks()));
     }
 
-    @GetMapping("/available")
     @Operation(summary = "Get available books", description = "Retrieve a list of books available in the library.")
+    @GetMapping("/available")
     public ResponseEntity<List<GetBookResponse>> getAvailableBooks() {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getAvailableBooks()));
     }
 
-    @PostMapping("/borrow/{bookId}")
     @Operation(summary = "Borrow a book", description = "Borrow a book from the library.")
+    @PostMapping("/borrow/{bookId}")
     public ResponseEntity<Void> borrowBook(@PathVariable Long bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
@@ -70,8 +70,8 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/borrowed")
     @Operation(summary = "Get borrowed books", description = "Retrieve a list of books borrowed by me.")
+    @GetMapping("/borrowed")
     public ResponseEntity<List<GetBookResponse>> getBorrowedBooks() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
@@ -84,8 +84,8 @@ public class BookController {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getBorrowedBooks(userId)));
     }
 
-    @PostMapping("/return/{bookId}")
     @Operation(summary = "Return a book", description = "Return a borrowed book to the library.")
+    @PostMapping("/return/{bookId}")
     public ResponseEntity<Void> returnBook(@PathVariable Long bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
@@ -99,8 +99,8 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/{bookId}")
     @Operation(summary = "Delete a book", description = "Delete a book by its ID.")
+    @DeleteMapping("/{bookId}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
         return ResponseEntity.noContent().build();
