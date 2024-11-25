@@ -2,7 +2,6 @@ package org.example.bookstore.security;
 
 import java.io.IOException;
 import java.util.Collection;
-import java.util.Collections;
 
 import org.example.bookstore.entity.User;
 import org.slf4j.Logger;
@@ -47,9 +46,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 User userDetails = customUserDetailService.loadUserById(userId);
                 Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
-                // Log out all information about the user
-
-                logger.debug("User ID: {}, user email: ", userDetails.getId(), userDetails.getEmail());
 
                 logger.debug("User {} with authorities {} authenticated", userDetails.getUsername(),
                         userDetails.getAuthorities());
