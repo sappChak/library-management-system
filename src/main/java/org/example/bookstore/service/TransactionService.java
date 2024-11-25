@@ -3,16 +3,11 @@ package org.example.bookstore.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.example.bookstore.dto.request.transaction.CreateTransactionRequest;
-import org.example.bookstore.dto.response.transaction.CreateTransactionResponse;
-import org.example.bookstore.dto.response.transaction.GetTransactionResponse;
 import org.example.bookstore.entity.Book;
 import org.example.bookstore.entity.Transaction;
 import org.example.bookstore.entity.User;
-import org.example.bookstore.mapper.TransactionMapper;
-import org.example.bookstore.repository.BookRepository;
+import org.example.bookstore.entity.enums.ActionType;
 import org.example.bookstore.repository.TransactionRepository;
-import org.example.bookstore.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -25,34 +20,27 @@ import lombok.RequiredArgsConstructor;
 public class TransactionService {
 
     private final TransactionRepository transactionRepository;
-    private final UserRepository userRepository;
-    private final BookRepository bookRepository;
-    private final TransactionMapper transactionMapper;
+    private final UserService userService;
 
-    public CreateTransactionResponse addTransaction(CreateTransactionRequest createTransactionRequestDTO) {
-        User user = userRepository.findById(createTransactionRequestDTO.getUserId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "User not found with ID: " + createTransactionRequestDTO.getUserId()));
+    public Transaction addTransaction(Long userId, Book book, ActionType action) {
+        User user = userService.getUserById(userId);
 
-        Book book = bookRepository.findById(createTransactionRequestDTO.getBookId())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "Book not found with ID: " + createTransactionRequestDTO.getBookId()));
+        Transaction transaction = new Transaction();
+        transaction.setUser(user);
+        transaction.setBook(book);
+        transaction.setAction(action);
+        transaction.setDate(LocalDateTime.now());
 
-        Transaction transaction = transactionMapper.toEntity(createTransactionRequestDTO, user, book);
-
-        return transactionMapper.toCreateResponseDto(transactionRepository.save(transaction));
+        return transactionRepository.save(transaction);
     }
 
-    public GetTransactionResponse getTransactionById(Long transactionId) {
-        Transaction transaction = transactionRepository.findById(transactionId)
+    public Transaction getTransactionById(Long transactionId) {
+        return transactionRepository.findById(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException("Transaction not found with ID: " + transactionId));
-
-        return transactionMapper.toGetResponseDto(transaction);
     }
 
-    public List<GetTransactionResponse> getAllTransactions() {
-        List<Transaction> transactions = transactionRepository.findAll();
-        return transactionMapper.toGetResponseDtoList(transactions);
+    public List<Transaction> getAllTransactions() {
+        return transactionRepository.findAll();
     }
 
     public void deleteTransaction(Long transactionId) {
