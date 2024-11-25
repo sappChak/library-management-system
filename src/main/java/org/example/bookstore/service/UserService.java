@@ -1,13 +1,7 @@
 package org.example.bookstore.service;
 
-import java.security.Principal;
-
-import org.example.bookstore.dto.UserDTO;
-import org.example.bookstore.dto.request.SignupRequest;
-import org.example.bookstore.entity.Role;
 import org.example.bookstore.entity.User;
 import org.example.bookstore.exception.UserExistsException;
-import org.example.bookstore.repository.RoleRepository;
 import org.example.bookstore.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,76 +16,38 @@ public class UserService {
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     private final UserRepository userRepository;
-    private final RoleRepository roleRepository;
+    private final RoleService roleService;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+    public UserService(UserRepository userRepository, RoleService roleService,
             BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.roleRepository = roleRepository;
+        this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
-    public void createUser(SignupRequest userIn) {
-        if (userRepository.existsByEmail(userIn.getEmail())) {
-            logger.warn("Attempted registration with existing email: {}", userIn.getEmail());
+    public void createUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            logger.warn("Attempted registration with existing email: {}", user.getEmail());
             throw new UserExistsException("Email already in use. Please use a different email.");
         }
 
-        if (userRepository.existsByUsername(userIn.getUsername())) {
-            logger.warn("Attempted registration with existing username: {}", userIn.getUsername());
+        if (userRepository.existsByUsername(user.getUsername())) {
+            logger.warn("Attempted registration with existing username: {}", user.getUsername());
             throw new UserExistsException("Username already in use. Please choose a different username.");
         }
 
-        User user = new User();
-        user.setEmail(userIn.getEmail());
-        user.setUsername(userIn.getUsername());
-        user.setPassword(passwordEncoder.encode(userIn.getPassword()));
-
-        Role userRole = roleRepository.findByRoleName("ROLE_USER")
-                .orElseThrow(() -> new RuntimeException("Default role ROLE_USER not found in the database"));
-        user.getRoles().add(userRole);
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.getRoles().add(roleService.getRoleByName("ROLE_USER"));
 
         try {
-            logger.info("Saving new user: {}", userIn.getEmail());
+            logger.info("Saving new user: {}", user.getEmail());
             userRepository.save(user);
         } catch (Exception e) {
             logger.error("Error saving user: {}", e.getMessage());
             throw new RuntimeException("Error creating user. Please try again later.");
         }
-    }
-
-    @Transactional
-    public User updateUser(UserDTO userDTO, Principal principal) {
-        User user = getUserByPrincipal(principal);
-
-        if (userDTO.getEmail() != null) {
-            user.setEmail(userDTO.getEmail());
-        }
-        if (userDTO.getUsername() != null) {
-            user.setUsername(userDTO.getUsername());
-        }
-
-        logger.info("Updating user: {}", user.getUsername());
-        return userRepository.save(user);
-    }
-
-    public User getCurrentUser(Principal principal) {
-        return getUserByPrincipal(principal);
-    }
-
-    private User getUserByPrincipal(Principal principal) {
-        if (principal == null || principal.getName() == null) {
-            logger.error("Principal is null or invalid");
-            throw new UsernameNotFoundException("Principal is invalid");
-        }
-
-        String username = principal.getName();
-        logger.info("Fetching user by username: {}", username);
-
-        return userRepository.findUserByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
 
     public User getUserById(Long id) {
