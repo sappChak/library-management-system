@@ -55,4 +55,14 @@ public class BookService {
         book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
     }
+
+    public void returnBook(Long bookId, Long userId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
+
+        transactionService.addTransaction(userId, book, ActionType.RETURN);
+
+        book.setAvailableCopies(book.getAvailableCopies() + 1);
+        bookRepository.save(book);
+    }
 }

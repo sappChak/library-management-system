@@ -65,6 +65,21 @@ public class BookController {
         return ResponseEntity.noContent().build();
     }
 
+    @PostMapping("/return/{bookId}")
+    @Operation(summary = "Return a book", description = "Return a borrowed book to the library.")
+    public ResponseEntity<Void> returnBook(@PathVariable Long bookId) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User userDetails = (User) authentication.getPrincipal();
+            userId = userDetails.getId();
+        }
+
+        bookService.returnBook(bookId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{bookId}")
     @Operation(summary = "Delete a book", description = "Delete a book by its ID.")
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
