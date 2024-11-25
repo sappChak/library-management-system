@@ -37,4 +37,11 @@ public class TransactionController {
         transactionService.deleteTransaction(transactionId);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/user/{userId}")
+    @Operation(summary = "Get transactions by user ID", description = "Retrieve a list of transactions by user.")
+    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId(@PathVariable Long userId) {
+        return ResponseEntity
+                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
+    }
 }
