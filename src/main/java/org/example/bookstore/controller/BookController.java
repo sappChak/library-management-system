@@ -35,7 +35,6 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
-    @RolesAllowed("ADMIN")
     @PostMapping
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
