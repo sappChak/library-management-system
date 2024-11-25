@@ -18,31 +18,31 @@ import org.springframework.web.cors.CorsConfigurationSource;
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CorsConfigurationSource corsConfigurationSource;
+        private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+        private final JwtAuthenticationFilter jwtAuthenticationFilter;
+        private final CorsConfigurationSource corsConfigurationSource;
 
-    @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-                .cors(cors -> cors.configurationSource(
-                        corsConfigurationSource))
-                .csrf(AbstractHttpConfigurer::disable)
-                .exceptionHandling(eh -> eh.authenticationEntryPoint(
-                        jwtAuthenticationEntryPoint))
-                .sessionManagement(sm -> sm.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(authz -> authz
-                        .requestMatchers(
-                                "/swagger-ui/**",
-                                "/v3/api-docs/**",
-                                "/api/auth/**")
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
-                .addFilterBefore(jwtAuthenticationFilter,
-                        UsernamePasswordAuthenticationFilter.class);
+        @Bean
+        SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+                http
+                                .cors(cors -> cors.configurationSource(
+                                                corsConfigurationSource))
+                                .csrf(AbstractHttpConfigurer::disable)
+                                .exceptionHandling(eh -> eh.authenticationEntryPoint(
+                                                jwtAuthenticationEntryPoint))
+                                .sessionManagement(sm -> sm.sessionCreationPolicy(
+                                                SessionCreationPolicy.STATELESS))
+                                .authorizeHttpRequests(authz -> authz
+                                                .requestMatchers(
+                                                                "/swagger-ui/**",
+                                                                "/v3/api-docs/**",
+                                                                "/api/auth/**")
+                                                .permitAll()
+                                                .anyRequest()
+                                                .authenticated())
+                                .addFilterBefore(jwtAuthenticationFilter,
+                                                UsernamePasswordAuthenticationFilter.class);
 
-        return http.build();
-    }
+                return http.build();
+        }
 }

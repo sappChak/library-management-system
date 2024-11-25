@@ -20,27 +20,27 @@ import jakarta.servlet.http.HttpServletResponse;
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
-    private final ObjectMapper objectMapper;
+        private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+        private final ObjectMapper objectMapper;
 
-    public JwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
-        this.objectMapper = objectMapper;
-    }
+        public JwtAuthenticationEntryPoint(ObjectMapper objectMapper) {
+                this.objectMapper = objectMapper;
+        }
 
-    @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-            AuthenticationException authException) throws IOException {
+        @Override
+        public void commence(HttpServletRequest request, HttpServletResponse response,
+                        AuthenticationException authException) throws IOException {
 
-        logger.warn("Unauthorized access attempt to {} - Reason: {}", request.getRequestURI(),
-                authException.getMessage());
+                logger.warn("Unauthorized access attempt to {} - Reason: {}", request.getRequestURI(),
+                                authException.getMessage());
 
-        InvalidLoginResponse loginResponse = new InvalidLoginResponse(
-                Instant.now().toString(),
-                "Unauthorized access",
-                request.getRequestURI());
+                InvalidLoginResponse loginResponse = new InvalidLoginResponse(
+                                Instant.now().toString(),
+                                "Unauthorized access",
+                                request.getRequestURI());
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpStatus.UNAUTHORIZED.value());
-        response.getWriter().write(objectMapper.writeValueAsString(loginResponse));
-    }
+                response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+                response.setStatus(HttpStatus.UNAUTHORIZED.value());
+                response.getWriter().write(objectMapper.writeValueAsString(loginResponse));
+        }
 }
