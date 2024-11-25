@@ -2,12 +2,14 @@ package org.example.bookstore.mapper;
 
 import javax.annotation.processing.Generated;
 import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.dto.request.user.UserRequest;
+import org.example.bookstore.dto.response.user.UserResponse;
 import org.example.bookstore.entity.User;
 import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-25T17:15:27+0100",
+    date = "2024-11-25T18:26:04+0100",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.39.0.v20240620-1855, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -26,5 +28,36 @@ public class UserMapperImpl implements UserMapper {
         user.setUsername( createUserRequestDTO.getUsername() );
 
         return user;
+    }
+
+    @Override
+    public User toEntity(UserRequest userRequest) {
+        if ( userRequest == null ) {
+            return null;
+        }
+
+        User user = new User();
+
+        user.setEmail( userRequest.getEmail() );
+        user.setPassword( userRequest.getPassword() );
+        user.setUsername( userRequest.getUsername() );
+
+        return user;
+    }
+
+    @Override
+    public UserResponse toResponse(User user) {
+        if ( user == null ) {
+            return null;
+        }
+
+        UserResponse userResponse = new UserResponse();
+
+        userResponse.setRoles( roleToStringSet( user.getRoles() ) );
+        userResponse.setEmail( user.getEmail() );
+        userResponse.setId( user.getId() );
+        userResponse.setUsername( user.getUsername() );
+
+        return userResponse;
     }
 }
