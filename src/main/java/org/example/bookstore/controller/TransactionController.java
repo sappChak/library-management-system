@@ -25,21 +25,21 @@ public class TransactionController {
     private final TransactionService transactionService;
     private final TransactionMapper transactionMapper;
 
-    @GetMapping
     @Operation(summary = "Get all transactions", description = "Retrieve a list of all transactions.")
+    @GetMapping
     public ResponseEntity<List<GetTransactionResponse>> getAllTransactions() {
         return ResponseEntity.ok(transactionMapper.toResponseDtoList(transactionService.getAllTransactions()));
     }
 
-    @DeleteMapping("/{transactionId}")
     @Operation(summary = "Delete a transaction", description = "Delete atransaction byits ID.")
+    @DeleteMapping("/{transactionId}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {
         transactionService.deleteTransaction(transactionId);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping("/user/{userId}")
     @Operation(summary = "Get transactions by user ID", description = "Retrieve a list of transactions by user.")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId(@PathVariable Long userId) {
         return ResponseEntity
                 .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
