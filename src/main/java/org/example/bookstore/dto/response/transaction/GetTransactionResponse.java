@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 public class GetTransactionResponse {
 
     @Schema(description = "ID of the transaction", example = "1001")
-    private Long transactionId;
+    private Long id;
 
     @Schema(description = "ID of the user who performed the transaction", example = "1")
     private Long userId;

@@ -25,7 +25,6 @@ public class TransactionService {
     public void addTransaction(Long userId, Book book, ActionType action) {
         User user = userService.getUserById(userId);
 
-        // Fetch only active borrow transactions for the user and book
         boolean hasActiveBorrow = transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
                 userId, book.getId(), ActionType.BORROW, true);
 
@@ -37,14 +36,12 @@ public class TransactionService {
             throw new IllegalArgumentException("You cannot return a book you haven't borrowed.");
         }
 
-        // Create and save the transaction
         Transaction transaction = new Transaction();
         transaction.setUser(user);
         transaction.setBook(book);
         transaction.setAction(action);
         transaction.setDate(LocalDateTime.now());
 
-        // Mark active borrow as inactive if the action is RETURN
         if (action == ActionType.RETURN) {
             Transaction activeBorrow = transactionRepository.findFirstByUserIdAndBookIdAndActionAndIsActive(
                     userId, book.getId(), ActionType.BORROW, true);
