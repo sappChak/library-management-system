@@ -52,8 +52,7 @@ public class AuthController {
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        String jwt = "Bearer " + jwtTokenProvider.generateToken(authentication);
-        return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwt));
+        return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwtTokenProvider.generateToken(authentication)));
     }
 
     @Operation(summary = "Register user", description = "Register user with username, email and password")
@@ -67,6 +66,7 @@ public class AuthController {
             return errors;
 
         userService.createUser(signupRequest);
+
         return ResponseEntity.ok(new MessageResponse("User registered successfully."));
     }
 }
