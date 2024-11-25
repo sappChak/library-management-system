@@ -1,4 +1,4 @@
-package org.example.bookstore.service;
+package org.example.bookstore.security;
 
 import org.example.bookstore.entity.User;
 import org.example.bookstore.repository.UserRepository;
@@ -30,12 +30,14 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     public User loadUserById(long id) {
-        return userRepository.findUserById(id).orElse(null);
+        User user = userRepository.findUserById(id).orElse(null);
+
+        return build(user);
     }
 
     public static User build(User user) {
         List<GrantedAuthority> authorities = user.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRoleName()))
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
                 .collect(Collectors.toList());
 
         return new User(
