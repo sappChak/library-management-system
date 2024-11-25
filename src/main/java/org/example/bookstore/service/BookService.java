@@ -2,11 +2,8 @@ package org.example.bookstore.service;
 
 import java.util.List;
 
-import org.example.bookstore.dto.request.book.CreateBookRequest;
-import org.example.bookstore.dto.request.book.UpdateBookRequest;
-import org.example.bookstore.dto.response.book.GetBookResponse;
 import org.example.bookstore.entity.Book;
-import org.example.bookstore.mapper.BookMapper;
+import org.example.bookstore.entity.enums.ActionType;
 import org.example.bookstore.repository.BookRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,38 +17,22 @@ import lombok.RequiredArgsConstructor;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final BookMapper bookMapper;
+    private final TransactionService transactionService;
 
-    public GetBookResponse addBook(CreateBookRequest createBookRequestDTO) {
-        if (bookRepository.existsByIsbn(createBookRequestDTO.getIsbn())) {
+    public Book addBook(Book book) {
+        if (bookRepository.existsByIsbn(book.getIsbn())) {
             throw new IllegalArgumentException("A book with this ISBN already exists.");
         }
-        Book savedBook = bookRepository.save(bookMapper.toEntity(createBookRequestDTO));
-        return bookMapper.toResponseDto(savedBook);
+        return bookRepository.save(book);
     }
 
-    public GetBookResponse updateBook(Long bookId, UpdateBookRequest updateBookRequestDTO) {
-        Book book = bookRepository.findById(bookId)
+    public Book getBookById(Long bookId) {
+        return bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
-
-        book.setTitle(updateBookRequestDTO.getTitle());
-        book.setAuthor(updateBookRequestDTO.getAuthor());
-        book.setIsbn(updateBookRequestDTO.getIsbn());
-        book.setAvailableCopies(updateBookRequestDTO.getAvailableCopies());
-
-        Book updatedBook = bookRepository.save(book);
-        return bookMapper.toResponseDto(updatedBook);
     }
 
-    public GetBookResponse getBookById(Long bookId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
-        return bookMapper.toResponseDto(book);
-    }
-
-    public List<GetBookResponse> getAllBooks() {
-        List<Book> books = bookRepository.findAll();
-        return bookMapper.toResponseDtoList(books);
+    public List<Book> getAllBooks() {
+        return bookRepository.findAll();
     }
 
     public void deleteBook(Long bookId) {
@@ -59,5 +40,19 @@ public class BookService {
             throw new EntityNotFoundException("Book not found with ID: " + bookId);
         }
         bookRepository.deleteById(bookId);
+    }
+
+    public void borrowBook(Long bookId, Long userId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
+
+        if (book.getAvailableCopies() == 0) {
+            throw new IllegalArgumentException("No available copies of this book.");
+        }
+
+        transactionService.addTransaction(userId, book, ActionType.BORROW);
+
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
+        bookRepository.save(book);
     }
 }
