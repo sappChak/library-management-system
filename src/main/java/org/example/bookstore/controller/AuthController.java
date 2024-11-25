@@ -5,6 +5,7 @@ import org.example.bookstore.dto.request.LoginRequest;
 import org.example.bookstore.dto.request.SignupRequest;
 import org.example.bookstore.dto.response.JwtTokenSuccessResponse;
 import org.example.bookstore.dto.response.MessageResponse;
+import org.example.bookstore.mapper.UserMapper;
 import org.example.bookstore.security.JwtTokenProvider;
 import org.example.bookstore.service.UserService;
 import org.example.bookstore.validations.ResponseErrorValidation;
@@ -36,6 +37,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final ResponseErrorValidation responseErrorValidation;
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @Operation(summary = "Login user", description = "Login user with username and password")
     @PostMapping("/login")
@@ -57,7 +59,7 @@ public class AuthController {
 
     @Operation(summary = "Register user", description = "Register user with username, email and password")
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest signupRequest,
+    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest userRequest,
             BindingResult bindingResult) {
 
         ResponseEntity<Object> errors = responseErrorValidation.mapValidationService(bindingResult);
@@ -65,7 +67,7 @@ public class AuthController {
         if (!ObjectUtils.isEmpty(errors))
             return errors;
 
-        userService.createUser(signupRequest);
+        userService.createUser(userMapper.toEntity(userRequest));
 
         return ResponseEntity.ok(new MessageResponse("User registered successfully."));
     }

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -34,6 +35,7 @@ public class BookController {
     private final BookService bookService;
     private final BookMapper bookMapper;
 
+    @RolesAllowed("ADMIN")
     @PostMapping
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
@@ -41,6 +43,7 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.CREATED).body(bookMapper.toResponseDto(book));
     }
 
+    @RolesAllowed("ADMIN")
     @GetMapping
     @Operation(summary = "Get all books", description = "Retrieve a list of all books in the library.")
     public ResponseEntity<List<GetBookResponse>> getAllBooks() {
@@ -59,7 +62,6 @@ public class BookController {
         }
 
         bookService.borrowBook(bookId, userId);
-
         return ResponseEntity.noContent().build();
     }
 

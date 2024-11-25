@@ -19,16 +19,14 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import lombok.extern.slf4j.Slf4j;
 
 @Component
-@Slf4j
 public class JwtTokenProvider {
 
   private final String jwtSecret;
   private final int jwtExpirationInMs;
 
-  private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationEntryPoint.class);
+  private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
 
   public JwtTokenProvider(
       @Value("${security.jwt.secret}") String jwtSecret,
@@ -45,6 +43,9 @@ public class JwtTokenProvider {
     Map<String, Object> claimsMap = new HashMap<>();
     claimsMap.put("id", user.getId());
     claimsMap.put("username", user.getUsername());
+    claimsMap.put("roles", user.getAuthorities());
+
+    logger.debug("User with ID {} and authorities {} authenticated", user.getId(), user.getAuthorities());
 
     return Jwts.builder()
         .setClaims(claimsMap)

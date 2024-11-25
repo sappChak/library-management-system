@@ -3,16 +3,18 @@ package org.example.bookstore.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
+@Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long roleId;
+    @Column(name = "role_id")
+    private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String roleName;
+    @Column(name = "role_name", nullable = false, unique = true)
+    private String name;
 }
