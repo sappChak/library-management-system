@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,8 +32,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     public User loadUserById(long id) {
         User user = userRepository.findUserById(id).orElse(null);
-
-        return build(user);
+        return build(Objects.requireNonNull(user));
     }
 
     public static User build(User user) {
