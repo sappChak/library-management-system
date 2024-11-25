@@ -22,7 +22,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserService userService;
 
-    public Transaction addTransaction(Long userId, Book book, ActionType action) {
+    public void addTransaction(Long userId, Book book, ActionType action) {
         User user = userService.getUserById(userId);
 
         // Fetch only active borrow transactions for the user and book
@@ -54,7 +54,7 @@ public class TransactionService {
             transaction.setActive(true);
         }
 
-        return transactionRepository.save(transaction);
+        transactionRepository.save(transaction);
     }
 
     public Transaction getTransactionById(Long transactionId) {
