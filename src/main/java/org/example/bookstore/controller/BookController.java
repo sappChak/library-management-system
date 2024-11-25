@@ -50,6 +50,12 @@ public class BookController {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getAllBooks()));
     }
 
+    @GetMapping("/available")
+    @Operation(summary = "Get available books", description = "Retrieve a list of books available in the library.")
+    public ResponseEntity<List<GetBookResponse>> getAvailableBooks() {
+        return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getAvailableBooks()));
+    }
+
     @PostMapping("/borrow/{bookId}")
     @Operation(summary = "Borrow a book", description = "Borrow a book from the library.")
     public ResponseEntity<Void> borrowBook(@PathVariable Long bookId) {
@@ -63,6 +69,20 @@ public class BookController {
 
         bookService.borrowBook(bookId, userId);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/borrowed")
+    @Operation(summary = "Get borrowed books", description = "Retrieve a list of books borrowed by me.")
+    public ResponseEntity<List<GetBookResponse>> getBorrowedBooks() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User userDetails = (User) authentication.getPrincipal();
+            userId = userDetails.getId();
+        }
+
+        return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getBorrowedBooks(userId)));
     }
 
     @PostMapping("/return/{bookId}")

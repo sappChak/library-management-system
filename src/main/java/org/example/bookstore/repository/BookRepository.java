@@ -10,6 +10,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     boolean existsByIsbn(String isbn);
 
-    Optional<List<Book>> findByAvailableCopiesGreaterThan(int availableCopies);
+    List<Book> findByAvailableCopiesGreaterThan(int availableCopies);
 
 }

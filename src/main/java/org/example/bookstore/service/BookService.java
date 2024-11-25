@@ -42,6 +42,10 @@ public class BookService {
         bookRepository.deleteById(bookId);
     }
 
+    public List<Book> getAvailableBooks() {
+        return bookRepository.findByAvailableCopiesGreaterThan(0);
+    }
+
     public void borrowBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
@@ -54,6 +58,13 @@ public class BookService {
 
         book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
+    }
+
+    public List<Book> getBorrowedBooks(Long userId) {
+        return transactionService.getTransactionsByUserId(userId).stream()
+                .filter(transaction -> transaction.getAction() == ActionType.BORROW)
+                .map(transaction -> transaction.getBook())
+                .toList();
     }
 
     public void returnBook(Long bookId, Long userId) {
