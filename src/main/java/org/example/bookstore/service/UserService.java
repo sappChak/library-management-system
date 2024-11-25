@@ -4,9 +4,10 @@ import java.security.Principal;
 
 import org.example.bookstore.dto.UserDTO;
 import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.entity.Role;
 import org.example.bookstore.entity.User;
-import org.example.bookstore.entity.enums.ERole;
 import org.example.bookstore.exception.UserExistsException;
+import org.example.bookstore.repository.RoleRepository;
 import org.example.bookstore.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +19,16 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final BCryptPasswordEncoder passwordEncoder;
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    public UserService(UserRepository userRepository, BCryptPasswordEncoder passwordEncoder) {
+    private final UserRepository userRepository;
+    private final RoleRepository roleRepository;
+    private final BCryptPasswordEncoder passwordEncoder;
+
+    public UserService(UserRepository userRepository, RoleRepository roleRepository,
+            BCryptPasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
+        this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -43,7 +48,10 @@ public class UserService {
         user.setEmail(userIn.getEmail());
         user.setUsername(userIn.getUsername());
         user.setPassword(passwordEncoder.encode(userIn.getPassword()));
-        user.getRoles().add(ERole.ROLE_USER);
+
+        Role userRole = roleRepository.findByRoleName("ROLE_USER")
+                .orElseThrow(() -> new RuntimeException("Default role ROLE_USER not found in the database"));
+        user.getRoles().add(userRole);
 
         try {
             logger.info("Saving new user: {}", userIn.getEmail());
