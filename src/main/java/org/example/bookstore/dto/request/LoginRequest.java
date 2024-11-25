@@ -13,6 +13,6 @@ public class LoginRequest {
         private String username;
 
         @NotEmpty(message = "Password cannot be empty")
-        @Schema(description = "Password of the user", example = "P@ssw0rd")
+        @Schema(description = "Password of the user", example = "securePassword123")
         private String password;
 }
