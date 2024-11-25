@@ -1,4 +1,4 @@
-package org.example.bookstore.dto.request;
+package org.example.bookstore.dto.request.auth;
 
 import org.example.bookstore.annotations.PasswordMatches;
 import org.example.bookstore.annotations.ValidEmail;

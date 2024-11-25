@@ -3,7 +3,7 @@ package org.example.bookstore.mapper;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.dto.request.auth.SignupRequest;
 import org.example.bookstore.dto.request.user.UserRequest;
 import org.example.bookstore.dto.response.user.UserResponse;
 import org.example.bookstore.entity.Role;

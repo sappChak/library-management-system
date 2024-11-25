@@ -2,8 +2,8 @@ package org.example.bookstore.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.example.bookstore.dto.request.LoginRequest;
-import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.dto.request.auth.LoginRequest;
+import org.example.bookstore.dto.request.auth.SignupRequest;
 import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.UserMapper;
 import org.example.bookstore.security.JwtTokenProvider;

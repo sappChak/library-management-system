@@ -1,8 +1,8 @@
 package org.example.bookstore.controller;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.example.bookstore.dto.request.LoginRequest;
-import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.dto.request.auth.LoginRequest;
+import org.example.bookstore.dto.request.auth.SignupRequest;
 import org.example.bookstore.dto.response.JwtTokenSuccessResponse;
 import org.example.bookstore.dto.response.MessageResponse;
 import org.example.bookstore.mapper.UserMapper;

@@ -1,7 +1,7 @@
 package org.example.bookstore.validations;
 
 import org.example.bookstore.annotations.PasswordMatches;
-import org.example.bookstore.dto.request.SignupRequest;
+import org.example.bookstore.dto.request.auth.SignupRequest;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

@@ -1,4 +1,4 @@
-package org.example.bookstore.dto.request;
+package org.example.bookstore.dto.request.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotEmpty;
