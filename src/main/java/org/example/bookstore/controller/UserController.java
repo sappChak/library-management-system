@@ -32,8 +32,6 @@ import lombok.RequiredArgsConstructor;
 @Tag(name = "Users", description = "Endpoints for managing users")
 public class UserController {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
-
     private final UserService userService;
     private final UserMapper userMapper;
 
@@ -51,7 +49,6 @@ public class UserController {
     public ResponseEntity<UserResponse> changeUserRoles(
             @PathVariable Long userId,
             @Valid @RequestBody ChangeUserRolesRequest newRoles) {
-        logger.debug("Changing roles for user ID {} with roles: {}", userId, newRoles.getRoleIds());
         var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
         return ResponseEntity.ok(userMapper.toResponse(savedUser));
     }

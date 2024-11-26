@@ -37,7 +37,7 @@ public class JwtTokenProvider {
         claimsMap.put("username", user.getUsername());
         claimsMap.put("roles", user.getAuthorities());
 
-        logger.debug("User with ID {} and authorities {} authenticated", user.getId(), user.getAuthorities());
+        logger.debug("Generating JWT token for user: {}", user.getUsername());
 
         return Jwts.builder()
                 .setClaims(claimsMap)
