@@ -1,6 +1,8 @@
 package org.example.bookstore.service;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.example.bookstore.entity.User;
 import org.example.bookstore.exception.UserExistsException;
@@ -109,6 +111,34 @@ public class UserService {
 
         existingUser.setRoles(user.getRoles());
         return userRepository.save(existingUser);
+    }
+
+    public User changeUserRoles(Long id, Set<Long> roleIds) {
+        logger.info("Changing roles for user with ID: {}", id);
+
+        var existingUser = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    logger.warn("Attempted to change roles for non-existent user with ID: {}", id);
+                    return new ResourceNotFoundException("User not found with ID: " + id);
+                });
+
+        var rolesToAdd = roleService.getRolesByIds(roleIds);
+
+        var existingRoles = existingUser.getRoles();
+
+        var newRoles = rolesToAdd.stream()
+                .filter(role -> !existingRoles.contains(role))
+                .collect(Collectors.toSet());
+
+        if (newRoles.isEmpty()) {
+            logger.info("No new roles to add for user ID: {}", id);
+        } else {
+            logger.info("Adding new roles for user ID {}: {}", id, newRoles);
+            existingRoles.addAll(newRoles);
+            userRepository.save(existingUser);
+        }
+
+        return existingUser;
     }
 
     private void validateUpdateEmail(String existingEmail, String newEmail) {

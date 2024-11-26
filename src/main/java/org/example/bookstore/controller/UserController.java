@@ -3,6 +3,7 @@ package org.example.bookstore.controller;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.example.bookstore.dto.request.user.ChangeUserRolesRequest;
 import org.example.bookstore.dto.request.user.UserRequest;
 import org.example.bookstore.dto.response.user.UserResponse;
 import org.example.bookstore.mapper.UserMapper;
@@ -14,11 +15,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
@@ -30,6 +31,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Tag(name = "Users", description = "Endpoints for managing users")
 public class UserController {
+
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(UserController.class);
 
     private final UserService userService;
     private final UserMapper userMapper;
@@ -43,13 +46,13 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponse(savedUser));
     }
 
-    @Operation(summary = "Update an existing user", description = "Updates user details and roles")
-    @PutMapping("/{userId}")
-    public ResponseEntity<UserResponse> updateUser(
+    @Operation(summary = "Change user's permissions", description = "Assign or remove roles from a user")
+    @PutMapping("/{userId}/roles")
+    public ResponseEntity<UserResponse> changeUserRoles(
             @PathVariable Long userId,
-            @Valid @RequestBody UserRequest userRequest) {
-        var updatedUser = userMapper.toEntity(userRequest);
-        var savedUser = userService.updateUser(userId, updatedUser);
+            @Valid @RequestBody ChangeUserRolesRequest newRoles) {
+        logger.debug("Changing roles for user ID {} with roles: {}", userId, newRoles.getRoleIds());
+        var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
         return ResponseEntity.ok(userMapper.toResponse(savedUser));
     }
 
