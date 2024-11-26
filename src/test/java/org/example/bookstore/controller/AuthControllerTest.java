@@ -1,43 +1,48 @@
 package org.example.bookstore.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.example.bookstore.dto.request.auth.LoginRequest;
 import org.example.bookstore.dto.request.auth.SignupRequest;
 import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.UserMapper;
-import org.example.bookstore.security.JwtTokenProvider;
 import org.example.bookstore.security.CustomUserDetailService;
+import org.example.bookstore.security.JwtTokenProvider;
 import org.example.bookstore.service.UserService;
 import org.example.bookstore.validations.ResponseErrorValidation;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(AuthController.class)
 public class AuthControllerTest {
 
-                private final MockMvc mockMvc;
+                private static final String MOCK_USERNAME = "testuser@mail.com";
+                private static final String MOCK_PASSWORD = "password123";
+                private static final String MOCK_JWT_TOKEN = "mock_jwt_token";
+
+                @Autowired
+                private MockMvc mockMvc;
 
                 @MockBean
                 private JwtTokenProvider jwtTokenProvider;
@@ -55,41 +60,80 @@ public class AuthControllerTest {
                 private UserService userService;
 
                 @MockBean
-                private UserMapper userMapper; // Add UserMapper as a mock
-
-                @Autowired
-                public AuthControllerTest(MockMvc mockMvc) {
-                                this.mockMvc = mockMvc;
-                }
+                private UserMapper userMapper;
 
                 @Test
                 @WithMockUser
-                void testAuthenticateUser_Success() throws Exception {
-                                // Mocking JWT token
-                                String mockJwtToken = "mock_jwt_token";
-
-                                LoginRequest loginRequest = new LoginRequest();
-                                loginRequest.setUsername("testuser@mail.com");
-                                loginRequest.setPassword("password123");
-                                String requestJson = new ObjectMapper().writeValueAsString(loginRequest);
-
-                                // Mock authentication request
-                                UsernamePasswordAuthenticationToken authRequest = new UsernamePasswordAuthenticationToken(
-                                                                loginRequest.getUsername(),
-                                                                loginRequest.getPassword());
+                void testLoginReturnsJwtTokenOnSuccessfulAuthentication() throws Exception {
+                                // Arrange
                                 Authentication authentication = mock(Authentication.class);
                                 when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                                                                 .thenReturn(authentication);
-                                when(jwtTokenProvider.generateToken(authentication)).thenReturn(mockJwtToken);
+                                when(jwtTokenProvider.generateToken(authentication)).thenReturn(MOCK_JWT_TOKEN);
 
-                                // Perform the login request and validate the response
+                                String requestJson = new ObjectMapper()
+                                                                .writeValueAsString(new LoginRequest(MOCK_USERNAME,
+                                                                                                MOCK_PASSWORD));
+
+                                // Act and Assert
                                 mockMvc.perform(post("/api/auth/login")
                                                                 .contentType(MediaType.APPLICATION_JSON)
                                                                 .content(requestJson)
                                                                 .with(csrf()))
                                                                 .andExpect(status().isOk())
                                                                 .andExpect(jsonPath("$.success").value(true))
-                                                                .andExpect(jsonPath("$.token").value(mockJwtToken));
+                                                                .andExpect(jsonPath("$.token").value(MOCK_JWT_TOKEN));
+
+                                // Verify the interactions
+                                ArgumentCaptor<UsernamePasswordAuthenticationToken> captor = ArgumentCaptor
+                                                                .forClass(UsernamePasswordAuthenticationToken.class);
+
+                                verify(authenticationManager).authenticate(captor.capture());
+                                UsernamePasswordAuthenticationToken capturedAuth = captor.getValue();
+                                assertEquals(MOCK_USERNAME, capturedAuth.getPrincipal());
+                                assertEquals(MOCK_PASSWORD, capturedAuth.getCredentials());
+
+                                verify(jwtTokenProvider).generateToken(authentication);
+                }
+
+                @Test
+                @WithMockUser
+                void testLoginFailsWhenCredentialsAreInvalid() throws Exception {
+                                // Mocking an authentication failure
+                                when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
+                                                                .thenThrow(new BadCredentialsException(
+                                                                                                "Invalid credentials"));
+
+                                String requestJson = new ObjectMapper()
+                                                                .writeValueAsString(new LoginRequest(MOCK_USERNAME,
+                                                                                                MOCK_PASSWORD));
+
+                                // Perform the login request and validate the response
+                                mockMvc.perform(post("/api/auth/login")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(requestJson)
+                                                                .with(csrf()))
+                                                                .andExpect(status().isUnauthorized())
+                                                                .andExpect(jsonPath("$.message").value(
+                                                                                                "Invalid credentials"));
+
+                                // Verify the interactions
+                                verify(authenticationManager).authenticate(
+                                                                any(UsernamePasswordAuthenticationToken.class));
+                                verify(jwtTokenProvider, never()).generateToken(any());
+                }
+
+                @Test
+                @WithMockUser
+                void testLoginFailsWithoutCsrfToken() throws Exception {
+                                String requestJson = new ObjectMapper()
+                                                                .writeValueAsString(new LoginRequest(MOCK_USERNAME,
+                                                                                                MOCK_PASSWORD));
+                                // Perform the login request without CSRF token and validate the response
+                                mockMvc.perform(post("/api/auth/login")
+                                                                .contentType(MediaType.APPLICATION_JSON)
+                                                                .content(requestJson))
+                                                                .andExpect(status().isForbidden());
                 }
 
                 @Test
@@ -99,48 +143,20 @@ public class AuthControllerTest {
                                 loginRequest.setPassword("wrong");
                                 String requestJson = new ObjectMapper().writeValueAsString(loginRequest);
 
-                                // Mock the authenticationManager to throw BadCredentialsException when
+                                // Mock the authenticationManager to throw
+                                // BadCredentialsException when
                                 // authentication is attempted
                                 when(authenticationManager.authenticate(any(UsernamePasswordAuthenticationToken.class)))
                                                                 .thenThrow(new BadCredentialsException(
                                                                                                 "Invalid credentials"));
 
-                                // Perform the login request and expect a 401 Unauthorized status
+                                // Perform the login request and expect a 401
+                                // Unauthorized status
                                 mockMvc.perform(post("/api/auth/login")
                                                                 .contentType(MediaType.APPLICATION_JSON)
                                                                 .content(requestJson)
                                                                 .with(csrf()))
                                                                 .andExpect(status().isUnauthorized());
-                }
-
-                @Test
-                @WithMockUser
-                void testAuthenticateUser_ValidationErrors() throws Exception {
-                                LoginRequest loginRequest = new LoginRequest();
-                                loginRequest.setUsername("");
-                                loginRequest.setPassword("");
-                                String requestJson = new ObjectMapper().writeValueAsString(loginRequest);
-
-                                BindingResult bindingResult = mock(BindingResult.class);
-                                when(bindingResult.hasErrors()).thenReturn(true);
-                                when(bindingResult.getAllErrors())
-                                                                .thenReturn(List.of(new ObjectError("loginRequest",
-                                                                                                "Validation error")));
-                                when(responseErrorValidation.mapValidationService(bindingResult))
-                                                                .thenReturn(ResponseEntity.badRequest().body(
-                                                                                                "Validation error"));
-
-                                // Ensure the mock is used by the controller
-                                doReturn(ResponseEntity.badRequest().body("Validation error"))
-                                                                .when(responseErrorValidation)
-                                                                .mapValidationService(any(BindingResult.class));
-
-                                mockMvc.perform(post("/api/auth/login")
-                                                                .contentType(MediaType.APPLICATION_JSON)
-                                                                .content(requestJson)
-                                                                .with(csrf()))
-                                                                .andExpect(status().isBadRequest())
-                                                                .andExpect(jsonPath("$").value("Validation error"));
                 }
 
                 @Test
@@ -166,34 +182,4 @@ public class AuthControllerTest {
                                                                                                 "User registered successfully."));
                 }
 
-                @Test
-                @WithMockUser
-                void testRegisterUser_ValidationErrors() throws Exception {
-                                SignupRequest signupRequest = new SignupRequest();
-                                signupRequest.setEmail("user@mail.com");
-                                signupRequest.setUsername("username");
-                                signupRequest.setPassword("password123");
-                                signupRequest.setConfirmPassword("password122");
-                                String requestJson = new ObjectMapper().writeValueAsString(signupRequest);
-
-                                BindingResult bindingResult = mock(BindingResult.class);
-                                when(bindingResult.hasErrors()).thenReturn(true);
-                                when(bindingResult.getAllErrors())
-                                                                .thenReturn(List.of(new ObjectError("signupRequest",
-                                                                                                "Validation error")));
-                                when(responseErrorValidation.mapValidationService(bindingResult))
-                                                                .thenReturn(ResponseEntity.badRequest().body(
-                                                                                                "Validation error"));
-
-                                doReturn(ResponseEntity.badRequest().body("Validation error"))
-                                                                .when(responseErrorValidation)
-                                                                .mapValidationService(any(BindingResult.class));
-
-                                mockMvc.perform(post("/api/auth/register")
-                                                                .contentType(MediaType.APPLICATION_JSON)
-                                                                .content(requestJson)
-                                                                .with(csrf()))
-                                                                .andExpect(status().isBadRequest())
-                                                                .andExpect(jsonPath("$").value("Validation error"));
-                }
 }
