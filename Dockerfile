@@ -1,4 +1,4 @@
-# Use a lightweight JDK base image for both build and runtime
+# Stage 1: Build stage
 FROM eclipse-temurin:17-jdk-alpine AS build
 
 # Set the working directory
@@ -13,15 +13,15 @@ COPY build.gradle settings.gradle ./
 RUN chmod +x gradlew
 
 # Download dependencies (caching this step improves build speed)
-RUN ./gradlew --no-daemon dependencies
+RUN ./gradlew dependencies --no-daemon
 
 # Copy the source code after dependencies are resolved
 COPY src src
 
-# Build the application
-RUN ./gradlew clean build --no-daemon
+# Build the application without tests (to avoid test container execution in this phase)
+RUN ./gradlew clean build -x test --no-daemon
 
-# Final stage: Use a minimal JRE image for runtime
+# Stage 2: Runtime stage
 FROM eclipse-temurin:17-jre-alpine
 
 # Set the working directory
