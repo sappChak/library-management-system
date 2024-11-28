@@ -22,7 +22,7 @@ public class TransactionService {
     private final TransactionRepository transactionRepository;
     private final UserService userService;
 
-    public void addTransaction(Long userId, Book book, ActionType action) {
+    public void recordTransaction(Long userId, Book book, ActionType action) {
         User user = userService.getUserById(userId);
 
         boolean hasActiveBorrow = transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(

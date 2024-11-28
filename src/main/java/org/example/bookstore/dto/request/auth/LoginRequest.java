@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class LoginRequest {
 
         @NotEmpty(message = "Username cannot be empty")
-        @Schema(description = "Username of the user", example = "john_doe")
+        @Schema(description = "Username of the user", example = "konotop_401")
         private String username;
 
         @NotEmpty(message = "Password cannot be empty")

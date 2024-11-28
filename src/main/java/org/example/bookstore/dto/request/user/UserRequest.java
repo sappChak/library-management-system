@@ -16,11 +16,11 @@ import lombok.NoArgsConstructor;
 @Schema(description = "Data Transfer Object for creating or updating a user")
 public class UserRequest {
 
-        @Schema(description = "Unique username for the user", example = "john_doe", required = true)
+        @Schema(description = "Unique username for the user", example = "konotop_401", required = true)
         @NotBlank
         private String username;
 
-        @Schema(description = "User's email address", example = "john.doe@example.com", required = true)
+        @Schema(description = "User's email address", example = "konotop401@gmail.com", required = true)
         @Email
         @NotBlank
         private String email;

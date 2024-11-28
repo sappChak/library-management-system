@@ -26,7 +26,7 @@ public class SignupRequest {
     private String email;
 
     @NotEmpty(message = "Please enter your username")
-    @Schema(description = "Username for the new user", example = "john_doe")
+    @Schema(description = "Username for the new user", example = "konotop_401")
     private String username;
 
     @NotEmpty(message = "Password is required")

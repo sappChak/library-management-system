@@ -47,6 +47,10 @@ public class BookService {
         return bookRepository.findByAvailableCopiesGreaterThan(0);
     }
 
+    public List<Book> searchBooks(String title) {
+        return bookRepository.findByTitleContainingIgnoreCase(title);
+    }
+
     public void borrowBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
@@ -55,7 +59,7 @@ public class BookService {
             throw new IllegalArgumentException("No available copies of this book.");
         }
 
-        transactionService.addTransaction(userId, book, ActionType.BORROW);
+        transactionService.recordTransaction(userId, book, ActionType.BORROW);
 
         book.setAvailableCopies(book.getAvailableCopies() - 1);
         bookRepository.save(book);
@@ -72,7 +76,7 @@ public class BookService {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
 
-        transactionService.addTransaction(userId, book, ActionType.RETURN);
+        transactionService.recordTransaction(userId, book, ActionType.RETURN);
 
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         bookRepository.save(book);
