@@ -25,7 +25,7 @@ public class UserRequest {
         @NotBlank
         private String email;
 
-        @Schema(description = "User's password", example = "P@ssw0rd123", required = true)
+        @Schema(description = "User's password", example = "securepassword123", required = true)
         @NotBlank
         @Size(min = 8, message = "Password must be at least 8 characters")
         private String password;

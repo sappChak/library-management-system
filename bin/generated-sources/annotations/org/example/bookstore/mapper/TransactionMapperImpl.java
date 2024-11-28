@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-11-25T19:23:19+0100",
+    date = "2024-11-25T19:52:03+0100",
     comments = "version: 1.5.5.Final, compiler: Eclipse JDT (IDE) 3.39.0.v20240620-1855, environment: Java 17.0.2 (Oracle Corporation)"
 )
 @Component
@@ -52,7 +52,7 @@ public class TransactionMapperImpl implements TransactionMapper {
         if ( transaction.getAction() != null ) {
             getTransactionResponse.setAction( transaction.getAction().name() );
         }
-        getTransactionResponse.setTransactionId( transaction.getTransactionId() );
+        getTransactionResponse.setId( transaction.getId() );
 
         return getTransactionResponse;
     }
