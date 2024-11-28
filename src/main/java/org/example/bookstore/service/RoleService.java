@@ -7,14 +7,13 @@ import org.example.bookstore.entity.Role;
 import org.example.bookstore.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class RoleService {
 
     private final RoleRepository roleRepository;
-
-    public RoleService(RoleRepository roleRepository) {
-        this.roleRepository = roleRepository;
-    }
 
     public Role getRoleByName(String roleName) {
         return roleRepository.findByName(roleName)

@@ -64,7 +64,7 @@ class TransactionServiceTest {
         when(transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
                 user.getId(), book.getId(), ActionType.BORROW, true)).thenReturn(false);
 
-        transactionService.addTransaction(user.getId(), book, ActionType.BORROW);
+        transactionService.recordTransaction(user.getId(), book, ActionType.BORROW);
 
         ArgumentCaptor<Transaction> transactionCaptor = ArgumentCaptor.forClass(Transaction.class);
         verify(transactionRepository).save(transactionCaptor.capture());
@@ -83,7 +83,7 @@ class TransactionServiceTest {
         when(transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
                 user.getId(), book.getId(), ActionType.BORROW, true)).thenReturn(true);
 
-        assertThatThrownBy(() -> transactionService.addTransaction(user.getId(), book, ActionType.BORROW))
+        assertThatThrownBy(() -> transactionService.recordTransaction(user.getId(), book, ActionType.BORROW))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("You already have an active borrow transaction for this book.");
 
@@ -107,7 +107,7 @@ class TransactionServiceTest {
                 user.getId(), book.getId(), ActionType.BORROW, true)).thenReturn(activeBorrowTransaction);
 
         // Act
-        transactionService.addTransaction(user.getId(), book, ActionType.RETURN);
+        transactionService.recordTransaction(user.getId(), book, ActionType.RETURN);
 
         // Assert
         // Verify the first save: marking the active borrow transaction as inactive
@@ -134,7 +134,7 @@ class TransactionServiceTest {
         when(transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
                 user.getId(), book.getId(), ActionType.BORROW, true)).thenReturn(false);
 
-        assertThatThrownBy(() -> transactionService.addTransaction(user.getId(), book, ActionType.RETURN))
+        assertThatThrownBy(() -> transactionService.recordTransaction(user.getId(), book, ActionType.RETURN))
                 .isInstanceOf(IllegalArgumentException.class)
                 .hasMessage("You cannot return a book you haven't borrowed.");
 
