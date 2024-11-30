@@ -49,10 +49,4 @@ public class AuthController {
         userService.createUser(userMapper.toEntity(userRequest));
         return ResponseEntity.ok(new MessageResponse("User registered successfully."));
     }
-
-    @Operation(summary = "Logout user", description = "Logout user")
-    public ResponseEntity<MessageResponse> logoutUser() {
-        // TODO: Implement logout
-        return ResponseEntity.ok(new MessageResponse("User logged out successfully."));
-    }
 }
