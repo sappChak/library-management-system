@@ -4,7 +4,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.example.bookstore.dto.request.auth.SignupRequest;
-import org.example.bookstore.dto.request.user.UpdateUserRequest;
 import org.example.bookstore.dto.request.user.UserRequest;
 import org.example.bookstore.dto.response.user.UserResponse;
 import org.example.bookstore.entity.Role;
@@ -20,11 +19,6 @@ public interface UserMapper {
     @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "roles", ignore = true)
     User toEntity(SignupRequest createUserRequestDTO);
-
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
-    @Mapping(target = "roles", ignore = true)
-    User toEntity(UpdateUserRequest updateUserRequestDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "roles", ignore = true)
