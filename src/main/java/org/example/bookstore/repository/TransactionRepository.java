@@ -16,4 +16,6 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
     List<Transaction> findAllByUserId(Long userId);
 
     List<Transaction> findAllByBookId(Long bookId);
+
+    List<Transaction> findAllByUserIdAndIsActive(Long userId, boolean isActive);
 }
