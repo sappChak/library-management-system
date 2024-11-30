@@ -6,6 +6,8 @@ import org.example.bookstore.entity.Book;
 import org.example.bookstore.entity.Transaction;
 import org.example.bookstore.entity.enums.ActionType;
 import org.example.bookstore.repository.BookRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Transactional
 public class BookService {
+
+    private static final Logger logger = LoggerFactory.getLogger(BookService.class);
 
     private final BookRepository bookRepository;
     private final TransactionService transactionService;
@@ -51,11 +55,13 @@ public class BookService {
         return bookRepository.findByTitleContainingIgnoreCase(title);
     }
 
+    @Transactional
     public void borrowBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
 
         if (book.getAvailableCopies() == 0) {
+            logger.error("No available copies of book with id: {}.", bookId);
             throw new IllegalArgumentException("No available copies of this book.");
         }
 
@@ -66,12 +72,13 @@ public class BookService {
     }
 
     public List<Book> getBorrowedBooks(Long userId) {
-        return transactionService.getTransactionsByUserId(userId).stream()
+        return transactionService.getTransactionsWithoutActiveBorrow(userId).stream()
                 .filter(transaction -> transaction.getAction() == ActionType.BORROW)
                 .map(Transaction::getBook)
                 .toList();
     }
 
+    @Transactional
     public void returnBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));

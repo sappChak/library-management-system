@@ -15,7 +15,7 @@ public interface BookMapper {
     @Mapping(target = "id", ignore = true)
     Book toEntity(CreateBookRequest createBookRequestDTO);
 
-    @Mapping(target = "bookId", source = "book.id")
+    @Mapping(target = "id", source = "book.id")
     GetBookResponse toResponseDto(Book book);
 
     List<GetBookResponse> toResponseDtoList(List<Book> books);

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class GetBookResponse {
 
     @Schema(description = "ID of the book", example = "1")
-    private Long bookId;
+    private Long id;
 
     @Schema(description = "Title of the book", example = "1984")
     private String title;
