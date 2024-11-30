@@ -35,18 +35,24 @@ public class AuthController {
 
     @Operation(summary = "Login user", description = "Login user with username and password")
     @PostMapping("/login")
-    public ResponseEntity<Object> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JwtTokenSuccessResponse> loginUser(@Valid @RequestBody LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                 loginRequest.getUsername(),
                 loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
-        return ResponseEntity.ok(new JwtTokenSuccessResponse(true, jwtTokenProvider.generateToken(authentication)));
+        return ResponseEntity.ok(new JwtTokenSuccessResponse(jwtTokenProvider.generateToken(authentication)));
     }
 
     @Operation(summary = "Register user", description = "Register user with username, email and password")
     @PostMapping("/register")
-    public ResponseEntity<Object> registerUser(@Valid @RequestBody SignupRequest userRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@Valid @RequestBody SignupRequest userRequest) {
         userService.createUser(userMapper.toEntity(userRequest));
         return ResponseEntity.ok(new MessageResponse("User registered successfully."));
+    }
+
+    @Operation(summary = "Logout user", description = "Logout user")
+    public ResponseEntity<MessageResponse> logoutUser() {
+        // TODO: Implement logout
+        return ResponseEntity.ok(new MessageResponse("User logged out successfully."));
     }
 }

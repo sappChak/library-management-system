@@ -81,8 +81,7 @@ public class AuthControllerTest {
                                                                 .content(requestJson)
                                                                 .with(csrf()))
                                                                 .andExpect(status().isOk())
-                                                                .andExpect(jsonPath("$.success").value(true))
-                                                                .andExpect(jsonPath("$.token").value(MOCK_JWT_TOKEN));
+                                                                .andExpect(jsonPath("$.access_token").value(MOCK_JWT_TOKEN));
 
                                 // Verify the interactions
                                 ArgumentCaptor<UsernamePasswordAuthenticationToken> captor = ArgumentCaptor
