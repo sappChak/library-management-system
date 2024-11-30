@@ -8,6 +8,13 @@ export interface LoginCredentials {
   password: string;
 }
 
+export interface RegisterCredentials {
+  email: string;
+  username: string;
+  password: string;
+  confirmPassword: string;
+}
+
 export interface AuthResponse {
   token: string;
 }

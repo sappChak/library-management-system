@@ -1,23 +1,18 @@
-import { User } from "@/types";
+import { LoginCredentials, RegisterCredentials, User } from "@/types";
 import httpClient from "./http-client";
 
-export const login = async (
-  username: string,
-  password: string,
-): Promise<string> => {
-  const response = await httpClient.post("/auth/login", { username, password });
+export const login = async (credentials: LoginCredentials): Promise<string> => {
+  const response = await httpClient.post("/auth/login", credentials);
   return response.data.access_token;
 };
 
 export const register = async (
-  email: string,
-  username: string,
-  password: string,
+  credentials: RegisterCredentials,
 ): Promise<void> => {
-  await httpClient.post("/auth/register", { email, username, password });
+  await httpClient.post("/auth/register", credentials);
 };
 
-export const getProfile = async (): Promise<User> => {
+export const getUserProfile = async (): Promise<User> => {
   const response = await httpClient.get("/users/me");
   return response.data;
 };

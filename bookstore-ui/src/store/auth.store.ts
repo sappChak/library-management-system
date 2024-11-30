@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { login, getProfile, register } from "@/api/auth.api";
-import { AuthState } from "@/types";
+import { login, getUserProfile, register } from "@/api/auth.api";
+import { AuthState, LoginCredentials, RegisterCredentials } from "@/types";
 
 export const useAuthStore = defineStore("auth", {
   state: (): AuthState => ({
@@ -9,9 +9,9 @@ export const useAuthStore = defineStore("auth", {
   }),
 
   actions: {
-    async login(username: string, password: string) {
+    async login(credentials: LoginCredentials) {
       try {
-        const token = await login(username, password);
+        const token = await login(credentials);
         this.token = token;
         localStorage.setItem("token", token);
 
@@ -22,9 +22,9 @@ export const useAuthStore = defineStore("auth", {
       }
     },
 
-    async register(email: string, username: string, password: string) {
+    async register(credentials: RegisterCredentials) {
       try {
-        await register(email, username, password);
+        await register(credentials);
       } catch (error) {
         console.error("Registration failed:", error);
         throw error;
@@ -33,7 +33,7 @@ export const useAuthStore = defineStore("auth", {
 
     async fetchUserProfile() {
       try {
-        const user = await getProfile();
+        const user = await getUserProfile();
         this.user = user;
       } catch (error) {
         console.error("Failed to fetch user profile:", error);
