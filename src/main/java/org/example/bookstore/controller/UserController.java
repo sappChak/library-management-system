@@ -10,6 +10,7 @@ import org.example.bookstore.mapper.UserMapper;
 import org.example.bookstore.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,14 @@ public class UserController {
             @Valid @RequestBody ChangeUserRolesRequest newRoles) {
         var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
         return ResponseEntity.ok(userMapper.toResponse(savedUser));
+    }
+
+    @Operation(summary = "Get current user", description = "Retrieve details of the currently authenticated user")
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> getCurrentUser() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var user = userService.getUserByUsername(authentication.getName());
+        return ResponseEntity.ok(userMapper.toResponse(user));
     }
 
     @Operation(summary = "Get user by ID", description = "Retrieve details of a user by ID")
