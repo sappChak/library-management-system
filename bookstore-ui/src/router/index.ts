@@ -11,7 +11,7 @@ const routes = [
   },
   {
     path: "/admin/users/add",
-    component: import("@/component/AddUser.vue"),
+    component: import("@/components/AddUser.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
   },
 ];
