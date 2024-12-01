@@ -17,6 +17,7 @@ import java.util.Map;
 public class JwtTokenProvider {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtTokenProvider.class);
+
     private final String jwtSecret;
     private final int jwtExpirationInMs;
 
@@ -32,10 +33,7 @@ public class JwtTokenProvider {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
-        Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put("id", user.getId());
-        claimsMap.put("username", user.getUsername());
-        claimsMap.put("roles", user.getAuthorities());
+        var claimsMap = createClaimsMap(user);
 
         logger.debug("Generating JWT token for user: {}", user.getUsername());
 
@@ -54,28 +52,27 @@ public class JwtTokenProvider {
                     .setSigningKey(jwtSecret)
                     .parseClaimsJws(token);
             return true;
-        } catch (ExpiredJwtException ex) {
-            logger.warn("JWT Token is expired: {}", ex.getMessage());
-        } catch (SignatureException ex) {
-            logger.error("JWT signature does not match: {}", ex.getMessage());
-        } catch (MalformedJwtException ex) {
-            logger.error("Invalid JWT token: {}", ex.getMessage());
-        } catch (UnsupportedJwtException ex) {
-            logger.error("Unsupported JWT token: {}", ex.getMessage());
-        } catch (IllegalArgumentException ex) {
-            logger.error("JWT claims string is empty: {}", ex.getMessage());
+        } catch (JwtException e) {
+            logger.error("JWT validation failed: {}", e.getMessage());
+            throw new JwtException("JWT validation failed");
         }
-        return false;
+
     }
 
     public Long getUserIdFromToken(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("id", Long.class);
+        return extractAllClaims(token).get("id", Long.class);
     }
 
     public String getUsernameFromToken(String token) {
-        Claims claims = extractAllClaims(token);
-        return claims.get("username", String.class);
+        return extractAllClaims(token).get("username", String.class);
+    }
+
+    private Map<String, Object> createClaimsMap(User user) {
+        Map<String, Object> claimsMap = new HashMap<>();
+        claimsMap.put("id", user.getId());
+        claimsMap.put("username", user.getUsername());
+        claimsMap.put("roles", user.getAuthorities());
+        return claimsMap;
     }
 
     private Claims extractAllClaims(String token) {
