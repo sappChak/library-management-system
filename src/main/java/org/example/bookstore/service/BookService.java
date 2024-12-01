@@ -51,6 +51,10 @@ public class BookService {
         return bookRepository.findByAvailableCopiesGreaterThan(0);
     }
 
+    public Long getAvailableBooksCount() {
+        return bookRepository.countByAvailableCopiesGreaterThan(0);
+    }
+
     public List<Book> searchBooks(String title) {
         return bookRepository.findByTitleContainingIgnoreCase(title);
     }
@@ -72,7 +76,7 @@ public class BookService {
     }
 
     public List<Book> getBorrowedBooks(Long userId) {
-        return transactionService.getTransactionsWithoutActiveBorrow(userId).stream()
+        return transactionService.getTransactionsWithActiveBorrow(userId).stream()
                 .filter(transaction -> transaction.getAction() == ActionType.BORROW)
                 .map(Transaction::getBook)
                 .toList();

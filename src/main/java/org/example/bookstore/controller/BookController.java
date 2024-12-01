@@ -55,6 +55,12 @@ public class BookController {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getAvailableBooks()));
     }
 
+    @Operation(summary = "Get number of available books", description = "Retrieve the number of books available in the library.")
+    @GetMapping("/available/count")
+    public ResponseEntity<Long> getAvailableBooksCount() {
+        return ResponseEntity.ok(bookService.getAvailableBooksCount());
+    }
+
     @Operation(summary = "Borrow a book", description = "Borrow a book from the library.")
     @PostMapping("/borrow/{bookId}")
     public ResponseEntity<Void> borrowBook(@PathVariable Long bookId) {
