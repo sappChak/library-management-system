@@ -73,8 +73,16 @@ public class TransactionService {
         return transactionRepository.findAllByUserId(userId);
     }
 
-    public List<Transaction> getTransactionsWithoutActiveBorrow(Long userId) {
+    public List<Transaction> getTransactionsWithActiveBorrow(Long userId) {
         return transactionRepository.findAllByUserIdAndIsActive(userId, true);
+    }
+
+    public Long getTotalReturnedBooksCount() {
+        return transactionRepository.countAllByActionAndIsActive(ActionType.RETURN, false);
+    }
+
+    public Long getActiveBorrowingsCount() {
+        return transactionRepository.countAllByActionAndIsActive(ActionType.BORROW, true);
     }
 
     public List<Transaction> getAllTransactions() {

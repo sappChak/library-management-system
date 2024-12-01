@@ -20,7 +20,7 @@ public class GetTransactionResponse {
     private Long userId;
 
     @Schema(description = "Name of the user who performed the transaction", example = "Andrii Konotop")
-    private String userName;
+    private String username;
 
     @Schema(description = "ID of the book involved in the transaction", example = "10")
     private Long bookId;

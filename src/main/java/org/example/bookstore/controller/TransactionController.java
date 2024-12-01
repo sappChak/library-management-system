@@ -31,6 +31,18 @@ public class TransactionController {
         return ResponseEntity.ok(transactionMapper.toResponseDtoList(transactionService.getAllTransactions()));
     }
 
+    @Operation(summary = "Get number of active borrowings", description = "Retrieve a number of active borrowings.")
+    @GetMapping("/active/count")
+    public ResponseEntity<Long> getActiveBorrowingsCount() {
+        return ResponseEntity.ok(transactionService.getActiveBorrowingsCount());
+    }
+
+    @Operation(summary = "Get total number of returns", description = "Retrieve a total number of returns.")
+    @GetMapping("/returned/count")
+    public ResponseEntity<Long> getActiveReturnsCount() {
+        return ResponseEntity.ok(transactionService.getTotalReturnedBooksCount());
+    }
+
     @Operation(summary = "Delete a transaction", description = "Delete atransaction byits ID.")
     @DeleteMapping("/{transactionId}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long transactionId) {

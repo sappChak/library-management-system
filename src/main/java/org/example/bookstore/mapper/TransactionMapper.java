@@ -23,7 +23,7 @@ public interface TransactionMapper {
     @Mapping(target = "bookId", source = "book.id")
     @Mapping(target = "date", source = "date", dateFormat = "dd-MM-yyyy HH:mm:ss")
     @Mapping(target = "bookTitle", source = "book.title")
-    @Mapping(target = "userName", source = "user.username")
+    @Mapping(target = "username", source = "user.username")
     GetTransactionResponse toResponseDto(Transaction transaction);
 
     List<GetTransactionResponse> toResponseDtoList(List<Transaction> transactions);
