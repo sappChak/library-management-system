@@ -18,6 +18,11 @@ const routes = [
     component: AdminDashboard,
     meta: { requiresAuth: true, requiresAdmin: true },
   },
+  {
+    path: "/books",
+    component: () => import("@/views/BookList.vue"),
+    meta: { requiresAuth: true },
+  },
 ];
 
 const router = createRouter({
