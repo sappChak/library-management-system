@@ -41,11 +41,10 @@ const handleLogin = async () => {
   try {
     await authStore.login({ username: username.value, password: password.value });
 
-    // Redirect based on user role
     if (authStore.isAdmin) {
-      router.push("/admin"); // Admin dashboard
+      router.push("/admin");
     } else {
-      router.push("/dashboard"); // User dashboard
+      router.push("/dashboard");
     }
   } catch (error) {
     errorMessage.value = "Invalid username or password.";
@@ -56,47 +55,143 @@ const handleLogin = async () => {
 </script>
 
 <style scoped>
-/* Styles for Login.vue */
-</style>
-
-
-<style scoped>
+/* Center the Login Container */
 .login-container {
-  width: 300px;
+  width: 400px;
   margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
+  padding: 30px;
+  background-color: white;
+  /* Clean white background */
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Soft shadow for depth */
+  font-family: "Arial", sans-serif;
+  /* Clean font */
+  text-align: center;
+  /* Center-align text */
+  position: absolute;
+  top: 50%;
+  /* Center vertically */
+  left: 50%;
+  /* Center horizontally */
+  transform: translate(-50%, -50%);
+  /* Adjust for centering */
 }
 
+/* Header */
+h1 {
+  margin-bottom: 20px;
+  font-size: 26px;
+  color: #4CAF50;
+  /* Green library theme */
+}
+
+/* Form Group */
 .form-group {
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  text-align: left;
+  /* Align labels and inputs properly */
 }
 
+/* Labels */
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+/* Input Fields */
 input {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
+  padding: 12px;
+  font-size: 16px;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 6px;
+  background-color: #f5f5f5;
+  /* Subtle background for inputs */
+  transition: all 0.3s ease;
 }
 
+/* Focused Input Fields */
+input:focus {
+  border-color: #4CAF50;
+  background-color: #fff;
+  outline: none;
+  box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+}
+
+/* Submit Button */
 button {
   width: 100%;
-  padding: 10px;
-  background-color: #4CAF50;
+  padding: 12px;
+  font-size: 16px;
+  font-weight: bold;
   color: white;
+  background-color: #4CAF50;
+  /* Green theme */
   border: none;
-  border-radius: 4px;
+  border-radius: 6px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #45a049;
+  /* Slightly darker on hover */
 }
 
 button:disabled {
   background-color: #ccc;
+  cursor: not-allowed;
 }
 
+/* Error Message */
 .error-message {
-  color: red;
   margin-top: 15px;
+  font-size: 14px;
+  color: red;
+}
+
+/* Footer Links */
+p {
+  margin-top: 30px;
+  font-size: 18px;
+  /* Bigger text for emphasis */
+  color: #333;
+  font-weight: semi-bold;
+  /* Make it stand out */
+}
+
+p a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 18px;
+  /* Match text size */
+}
+
+p a:hover {
+  text-decoration: underline;
+}
+
+/* Add some space for responsiveness */
+@media (max-width: 500px) {
+  .login-container {
+    width: 90%;
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+
+  p {
+    font-size: 16px;
+  }
 }
 </style>
