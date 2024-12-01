@@ -69,6 +69,11 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public Long getUsersCount() {
+        logger.info("Fetching total number of users");
+        return userRepository.count();
+    }
+
     public void deleteUser(Long id) {
         logger.info("Deleting user with ID: {}", id);
 

@@ -79,6 +79,12 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @Operation(summary = "Get number of users", description = "Retrieve the number of users")
+    @GetMapping("/count")
+    public ResponseEntity<Long> getUsersCount() {
+        return ResponseEntity.ok(userService.getUsersCount());
+    }
+
     @Operation(summary = "Delete user", description = "Deletes a user by ID")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
