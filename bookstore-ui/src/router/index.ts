@@ -1,27 +1,18 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { authGuard } from "./auth.guard";
-import Login from "@/views/Login.vue";
-import Register from "@/views/Register.vue";
-import UserDashboard from "@/views/UserDashboard.vue";
-import AdminDashboard from "@/views/AdminDashboard.vue";
 
 const routes = [
-  { path: "/login", component: Login },
-  { path: "/register", component: Register },
-  {
-    path: "/dashboard",
-    component: UserDashboard,
-    meta: { requiresAuth: true },
-  },
+  { path: "/login", component: import("@/views/auth/Login.vue") },
+  { path: "/register", component: import("@/views/auth/Register.vue") },
   {
     path: "/admin",
-    component: AdminDashboard,
+    component: import("@/views/admin/Dashboard.vue"),
     meta: { requiresAuth: true, requiresAdmin: true },
   },
   {
-    path: "/books",
-    component: () => import("@/views/BookList.vue"),
-    meta: { requiresAuth: true },
+    path: "/admin/users/add",
+    component: import("@/component/AddUser.vue"),
+    meta: { requiresAuth: true, requiresAdmin: true },
   },
 ];
 

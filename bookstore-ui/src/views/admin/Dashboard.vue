@@ -4,12 +4,30 @@
     <aside class="sidebar">
       <h2 class="logo">Library System</h2>
       <ul class="nav-links">
-        <li><router-link to="/admin">Dashboard</router-link></li>
-        <li><router-link to="/admin/users">Users</router-link></li>
-        <li><router-link to="/admin/categories">Categories</router-link></li>
-        <li><router-link to="/admin/books">Books</router-link></li>
-        <li><router-link to="/admin/borrow">Book Borrow</router-link></li>
-        <li><router-link to="/admin/return">Book Return</router-link></li>
+        <!-- Users Dropdown -->
+        <li>
+          <div class="dropdown">
+            <button class="dropdown-btn" @click="toggleDropdown('users')">Manage Users</button>
+            <ul v-if="isDropdownOpen.users" class="dropdown-menu">
+              <li><router-link to="/admin/users/add">Add User</router-link></li>
+              <li><router-link to="/admin/users/edit">Edit User</router-link></li>
+              <li><router-link to="/admin/users/delete">Delete User</router-link></li>
+              <li><router-link to="/admin/users/list">View Users</router-link></li>
+            </ul>
+          </div>
+        </li>
+        <!-- Books Dropdown -->
+        <li>
+          <div class="dropdown">
+            <button class="dropdown-btn" @click="toggleDropdown('books')">Manage Books</button>
+            <ul v-if="isDropdownOpen.books" class="dropdown-menu">
+              <li><router-link to="/admin/books/add">Add Book</router-link></li>
+              <li><router-link to="/admin/books/edit">Edit Book</router-link></li>
+              <li><router-link to="/admin/books/delete">Delete Book</router-link></li>
+              <li><router-link to="/admin/books/list">View Books</router-link></li>
+            </ul>
+          </div>
+        </li>
       </ul>
       <button class="logout" @click="logout">Logout</button>
     </aside>
@@ -89,6 +107,13 @@ const activeBorrowers = ref(0);
 const totalReturns = ref(0);
 const recentActivities = ref<Transaction[]>([]);
 
+const isDropdownOpen = ref({
+  users: false,
+  books: false,
+});
+
+type DropdownKey = 'users' | 'books';
+
 const fetchDashboardData = async () => {
   try {
     await bookStore.loadAvailableBooks();
@@ -103,15 +128,23 @@ const fetchDashboardData = async () => {
   }
 };
 
+// Toggle dropdown menu
+const toggleDropdown = (dropdown: DropdownKey) => {
+  isDropdownOpen.value[dropdown] = !isDropdownOpen.value[dropdown];
+};
+
+// Logout
 const logout = () => {
   authStore.logout();
   window.location.reload();
 };
 
+// Fetch data on mount
 onMounted(() => {
   fetchDashboardData();
 });
 </script>
+
 
 <style scoped>
 /* Main Layout */
@@ -125,7 +158,7 @@ onMounted(() => {
 /* Sidebar */
 .sidebar {
   width: 280px;
-  background: linear-gradient(135deg, #2e7d32, #388e3c);
+  background: linear-gradient(135deg, #d32f2f, #c62828);
   color: white;
   padding: 25px 20px;
   display: flex;
@@ -146,47 +179,72 @@ onMounted(() => {
   padding-bottom: 15px;
 }
 
-.sidebar .nav-links {
+.nav-links {
   list-style: none;
   padding: 0;
   margin: 0;
 }
 
-.sidebar .nav-links li {
+.dropdown {
   margin-bottom: 15px;
 }
 
-.sidebar .nav-links a {
+.dropdown-btn {
+  background-color: transparent;
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  font-size: 16px;
+  text-align: left;
+  display: block;
+  width: 100%;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.dropdown-btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown-menu {
+  list-style: none;
+  padding-left: 20px;
+  margin-top: 10px;
+}
+
+.dropdown-menu li {
+  margin-bottom: 10px;
+}
+
+.dropdown-menu a {
   color: white;
   text-decoration: none;
-  font-size: 16px;
-  padding: 12px 18px;
+  padding: 8px 12px;
   display: block;
   border-radius: 8px;
-  transition: background-color 0.3s ease, transform 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
-.sidebar .nav-links a:hover {
-  background-color: rgba(255, 255, 255, 0.15);
-  transform: scale(1.05);
+.dropdown-menu a:hover {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.sidebar .logout {
+.logout {
   margin-top: auto;
   font-size: 16px;
   padding: 12px 20px;
-  background-color: #d32f2f;
+  background-color: #b71c1c;
   color: white;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   text-align: center;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: background-color 0.3s ease;
 }
 
-.sidebar .logout:hover {
-  background-color: #b71c1c;
-  transform: translateY(-3px);
+.logout:hover {
+  background-color: #d32f2f;
 }
 
 /* Main Content */
@@ -229,7 +287,7 @@ onMounted(() => {
 }
 
 .widget {
-  background: linear-gradient(135deg, #4caf50, #81c784);
+  background: linear-gradient(135deg, #d32f2f, #e57373);
   padding: 20px;
   border-radius: 12px;
   text-align: center;
@@ -242,91 +300,55 @@ onMounted(() => {
 
 .widget:hover {
   transform: translateY(-5px);
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.3);
-}
-
-.widget::before {
-  content: "";
-  position: absolute;
-  top: -40px;
-  right: -40px;
-  width: 100px;
-  height: 100px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 50%;
-  z-index: 0;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
 .widget h3 {
-  margin: 0 0 12px;
   font-size: 18px;
-  font-weight: bold;
-  position: relative;
-  z-index: 1;
+  font-weight: 500;
+  margin-bottom: 12px;
 }
 
 .widget p {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: bold;
   margin: 0;
-  position: relative;
-  z-index: 1;
 }
 
 /* Data Tables */
 .data-tables {
   background-color: #ffffff;
-  padding: 30px;
+  padding: 20px;
   border-radius: 12px;
+  text-align: left;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.data-tables h2 {
-  margin: 0 0 20px;
-  font-size: 22px;
-  color: #333333;
-  font-weight: bold;
-  border-bottom: 3px solid #4caf50;
-  display: inline-block;
-  padding-bottom: 5px;
 }
 
 .data-tables table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 15px;
 }
 
-.data-tables table th,
-.data-tables table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #eeeeee;
+.data-tables th,
+.data-tables td {
+  padding: 12px 15px;
+  border-bottom: 1px solid #f1f1f1;
   text-align: center;
+  color: #333;
 }
 
-.data-tables table th {
-  background-color: #4caf50;
-  color: white;
-  font-weight: bold;
+.data-tables th {
+  background-color: #f5f5f5;
+  font-size: 14px;
 }
 
-.data-tables table td {
-  color: #555555;
+.data-tables td {
+  font-size: 14px;
 }
 
-.data-tables table tr:hover {
-  background-color: #f9fbe7;
-}
-
-/* Media Queries for Responsiveness */
 @media screen and (max-width: 768px) {
   .sidebar {
     width: 220px;
-  }
-
-  .dashboard-widgets {
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   }
 }
 </style>
