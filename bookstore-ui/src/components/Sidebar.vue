@@ -26,8 +26,6 @@
         <ul class="dropdown-list">
           <li><router-link to="/admin/books" class="nav-link">View Books</router-link></li>
           <li><router-link to="/admin/books/add" class="nav-link">Add Book</router-link></li>
-          <li><router-link to="/admin/books/edit" class="nav-link">Edit Book</router-link></li>
-          <li><router-link to="/admin/books/delete" class="nav-link">Delete Book</router-link></li>
         </ul>
       </Dropdown>
     </nav>
@@ -50,15 +48,14 @@ const toggleSidebar = () => {
 <style scoped>
 /* Sidebar Styles */
 .sidebar {
-  background-color: #333;
-  /* Darker background for modern minimalism */
-  color: #f5f5f5;
-  /* Light text color for contrast */
+  background-color: #2c2c2c;
+  /* Slightly lighter for a sleeker look */
+  color: #eaeaea;
+  /* Softer light text color */
   width: 250px;
   min-height: 100vh;
   padding: 20px;
   border-radius: 12px;
-  /* Slightly rounded corners for a modern feel */
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
   overflow: hidden;
@@ -72,20 +69,19 @@ const toggleSidebar = () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 25px;
-  border-bottom: 2px solid #444;
-  /* Lighter border */
+  margin-bottom: 20px;
+  border-bottom: 1px solid #3e3e3e;
+  /* Subtle border */
   padding-bottom: 12px;
 }
 
 .logo {
   font-family: 'Roboto', sans-serif;
-  /* Clean, minimalistic font */
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 500;
   color: #ffffff;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   display: flex;
   align-items: center;
 }
@@ -93,14 +89,14 @@ const toggleSidebar = () => {
 .logo img {
   height: 35px;
   width: 35px;
-  margin-right: 10px;
+  margin-right: 12px;
 }
 
 .toggle-btn {
   background: none;
   border: none;
   color: #ffffff;
-  font-size: 1.5rem;
+  font-size: 1.6rem;
   cursor: pointer;
   transition: color 0.3s ease;
 }
@@ -112,31 +108,31 @@ const toggleSidebar = () => {
 
 /* Navigation Links */
 .nav-links {
-  margin-top: 15px;
+  margin-top: 20px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .nav-link {
-  padding: 12px 18px;
-  border-radius: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
   font-size: 15px;
-  color: #f5f5f5;
+  color: #eaeaea;
   text-decoration: none;
   font-family: 'Roboto', sans-serif;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
   display: block;
 }
 
 .nav-link:hover {
-  background-color: #444444;
+  background-color: #414141;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-link.active {
-  background-color: #555555;
+  background-color: #525252;
   font-weight: 600;
 }
 
@@ -147,15 +143,15 @@ const toggleSidebar = () => {
 
 .dropdown-btn {
   background-color: transparent;
-  color: white;
+  color: #eaeaea;
   border: none;
-  padding: 12px 18px;
-  font-size: 16px;
+  padding: 12px 16px;
+  font-size: 15px;
   text-align: left;
   width: 100%;
   cursor: pointer;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.2s ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -163,6 +159,7 @@ const toggleSidebar = () => {
 
 .dropdown-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .dropdown-list {
@@ -176,26 +173,26 @@ const toggleSidebar = () => {
 }
 
 .dropdown-list a {
-  color: white;
+  color: #eaeaea;
   text-decoration: none;
-  padding: 10px 15px;
+  padding: 10px 14px;
   display: block;
   font-family: 'Roboto', sans-serif;
   border-radius: 8px;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.2s ease;
 }
 
 .dropdown-list a:hover {
   background-color: #444444;
+  color: #ffffff;
 }
 
 /* Logout Button */
 .logout {
   margin-top: auto;
   padding: 12px 20px;
-  background-color: #ff6f61;
-  /* Modern accent color */
-  color: #ffffff;
+  background-color: transparent;
+  color: #eaeaea;
   border: none;
   border-radius: 8px;
   font-size: 14px;
@@ -206,8 +203,9 @@ const toggleSidebar = () => {
 }
 
 .logout:hover {
-  background-color: #ff4a36;
+  background-color: #ff5a4b;
   transform: translateY(-2px);
+  color: #ffffff;
 }
 
 /* Responsive Styles */
@@ -221,7 +219,7 @@ const toggleSidebar = () => {
   }
 
   .nav-link {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .dropdown-btn {

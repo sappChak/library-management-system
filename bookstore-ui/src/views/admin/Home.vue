@@ -7,7 +7,7 @@
       <DashboardWidget title="Active Borrowers" :value="activeBorrowers" />
       <DashboardWidget title="Total Returns" :value="totalReturns" />
     </section>
-    <RecentActivities />
+    <RecentTransactions />
   </div>
 </template>
 
@@ -15,8 +15,8 @@
 import { ref, onMounted } from "vue";
 import { fetchNumberOfActiveBorrows, fetchNumberOfReturns, fetchNumberOfUsers } from "@/api";
 import { useAuthStore } from "@/store/auth.store";
-import RecentActivities from "@/components/RecentActivities.vue";
 import DashboardWidget from "@/components/DashboardWidget.vue";
+import RecentTransactions from "@/components/RecentTransactions.vue";
 import Header from "@/components/Header.vue";
 
 const authStore = useAuthStore();
