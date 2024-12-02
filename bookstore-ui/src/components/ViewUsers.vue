@@ -8,6 +8,7 @@
           <th>Username</th>
           <th>Email</th>
           <th>Roles</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -16,8 +17,15 @@
           <td>{{ user.username }}</td>
           <td>{{ user.email }}</td>
           <td>
-            <span v-for="(role, index) in user.roles" :key="index">{{ role }}<span
-                v-if="index < user.roles.length - 1">, </span></span>
+            <span v-for="(role, index) in user.roles" :key="index">
+              {{ role }}
+              <span v-if="index < user.roles.length - 1">, </span>
+            </span>
+          </td>
+          <td>
+            <button class="delete-btn" @click="deleteUser(user.id)" aria-label="Delete user">
+              Delete
+            </button>
           </td>
         </tr>
       </tbody>
@@ -27,12 +35,11 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchUsers } from "@/api/user.api";
+import { fetchUsers, deleteUserById } from "@/api/user.api";
 import { UserResponse } from "@/types/user";
 
 const users = ref<UserResponse[]>([]);
 
-// Fetch users data from the backend API
 const fetchUsersData = async () => {
   try {
     users.value = await fetchUsers();
@@ -41,9 +48,24 @@ const fetchUsersData = async () => {
   }
 };
 
+const deleteUser = async (id: number) => {
+  try {
+    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    if (confirmDelete) {
+      await deleteUserById(id);
+      users.value = users.value.filter(user => user.id !== id); // Remove user locally
+      alert(`User with ID ${id} has been deleted successfully.`);
+    }
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+    alert("Error deleting the user. Please try again.");
+  }
+};
+
 onMounted(() => {
   fetchUsersData();
 });
+
 </script>
 
 <style scoped>
@@ -115,6 +137,23 @@ onMounted(() => {
 
 .users-table tbody tr:nth-child(odd) {
   background-color: #2a2a2a;
+}
+
+.delete-btn {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #ff4a36;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {

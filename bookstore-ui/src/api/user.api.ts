@@ -16,3 +16,7 @@ export const fetchNumberOfUsers = async (): Promise<number> => {
 export const addUser = async (user: CreateUserRequest): Promise<void> => {
   await httpClient.post("/users", user);
 };
+
+export const deleteUserById = async (id: number): Promise<void> => {
+  await httpClient.delete(`/users/${id}`);
+};
