@@ -42,7 +42,7 @@ const handleLogin = async () => {
     await authStore.login({ username: username.value, password: password.value });
 
     if (authStore.isAdmin) {
-      router.push("/admin");
+      router.push("admin/info");
     } else {
       router.push("/dashboard");
     }

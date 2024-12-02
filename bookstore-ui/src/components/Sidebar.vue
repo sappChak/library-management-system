@@ -10,6 +10,10 @@
     </div>
 
     <nav class="nav-links">
+      <ul>
+        <li @click="navigate('/admin/info')">General information</li>
+      </ul>
+      <!--Manage users -->
       <Dropdown title="Manage Users">
         <template #default>
           <router-link to="/admin/users/add">Add User</router-link>
@@ -38,6 +42,13 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Dropdown from "@/components/Dropdown.vue";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+
+const navigate = (path: string) => {
+  router.push(path);
+}
 
 const isCollapsed = ref(false);
 
