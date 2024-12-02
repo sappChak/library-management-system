@@ -17,7 +17,9 @@
       <p>{{ errorMessage }}</p>
     </div>
 
-    <p>Don't have an account? <router-link to="/register">Register</router-link></p>
+    <p class="register-link">
+      Don't have an account? <router-link to="/register">Register</router-link>
+    </p>
   </div>
 </template>
 
@@ -60,37 +62,33 @@ const handleLogin = async () => {
   width: 400px;
   margin: 0 auto;
   padding: 30px;
-  background-color: white;
-  /* Clean white background */
+  background-color: #fff;
+  /* White background for the container */
+  color: #000;
+  /* Black text for readability */
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   /* Soft shadow for depth */
   font-family: "Arial", sans-serif;
-  /* Clean font */
   text-align: center;
-  /* Center-align text */
   position: absolute;
   top: 50%;
-  /* Center vertically */
   left: 50%;
-  /* Center horizontally */
   transform: translate(-50%, -50%);
-  /* Adjust for centering */
 }
 
 /* Header */
 h1 {
   margin-bottom: 20px;
   font-size: 26px;
-  color: #4CAF50;
-  /* Green library theme */
+  color: #000;
+  /* Black text for header */
 }
 
 /* Form Group */
 .form-group {
   margin-bottom: 20px;
   text-align: left;
-  /* Align labels and inputs properly */
 }
 
 /* Labels */
@@ -99,6 +97,7 @@ label {
   margin-bottom: 8px;
   font-weight: bold;
   color: #333;
+  /* Dark gray color for labels */
 }
 
 /* Input Fields */
@@ -107,18 +106,24 @@ input {
   padding: 12px;
   font-size: 16px;
   border: 1px solid #ccc;
+  /* Light gray border */
   border-radius: 6px;
-  background-color: #f5f5f5;
-  /* Subtle background for inputs */
+  background-color: #fafafa;
+  /* Light gray background for inputs */
+  color: #000;
+  /* Black text inside input fields */
   transition: all 0.3s ease;
 }
 
 /* Focused Input Fields */
 input:focus {
-  border-color: #4CAF50;
+  border-color: #000;
+  /* Black border on focus */
   background-color: #fff;
+  /* White background on focus */
   outline: none;
-  box-shadow: 0 0 4px rgba(76, 175, 80, 0.4);
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.4);
+  /* Black shadow for focus */
 }
 
 /* Submit Button */
@@ -127,9 +132,9 @@ button {
   padding: 12px;
   font-size: 16px;
   font-weight: bold;
-  color: white;
-  background-color: #4CAF50;
-  /* Green theme */
+  color: #fff;
+  background-color: #000;
+  /* Black background */
   border: none;
   border-radius: 6px;
   cursor: pointer;
@@ -137,12 +142,13 @@ button {
 }
 
 button:hover {
-  background-color: #45a049;
-  /* Slightly darker on hover */
+  background-color: #333;
+  /* Dark gray on hover */
 }
 
 button:disabled {
   background-color: #ccc;
+  /* Light gray for disabled button */
   cursor: not-allowed;
 }
 
@@ -150,25 +156,25 @@ button:disabled {
 .error-message {
   margin-top: 15px;
   font-size: 14px;
-  color: red;
+  color: #e74c3c;
+  /* Red color for error messages */
 }
 
 /* Footer Links */
 p {
   margin-top: 30px;
   font-size: 18px;
-  /* Bigger text for emphasis */
   color: #333;
+  /* Dark gray for footer text */
   font-weight: semi-bold;
-  /* Make it stand out */
 }
 
 p a {
-  color: #4CAF50;
+  color: #000;
+  /* Black links */
   text-decoration: none;
   font-weight: bold;
   font-size: 18px;
-  /* Match text size */
 }
 
 p a:hover {
