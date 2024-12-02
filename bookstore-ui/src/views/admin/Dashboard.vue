@@ -30,13 +30,6 @@ const logout = () => {
   background-color: #f3f4f6;
 }
 
-.dashboard-widgets {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
-}
-
 .main-content {
   flex-grow: 1;
   padding: 30px;

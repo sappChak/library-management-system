@@ -19,7 +19,6 @@ const logout = () => {
   authStore.logout();
   window.location.reload();
 };
-
 </script>
 
 <style scoped>
@@ -28,18 +27,17 @@ const logout = () => {
   height: 100vh;
   font-family: "Poppins", Arial, sans-serif;
   background-color: #f3f4f6;
-}
-
-.dashboard-widgets {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
+  overflow: hidden;
 }
 
 .main-content {
   flex-grow: 1;
-  padding: 30px;
+  padding: 80px;
+  transition: margin-left 0.3s ease;
   overflow-y: auto;
+}
+
+.app-layout .sidebar.collapsed+.main-content {
+  margin-left: 80px;
 }
 </style>

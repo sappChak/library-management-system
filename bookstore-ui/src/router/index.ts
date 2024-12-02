@@ -10,13 +10,18 @@ const routes = [
     meta: { requiresAuth: true },
     children: [
       {
-        path: "admin/info",
-        component: import("@/views/admin/GeneralInfo.vue"),
+        path: "admin",
+        component: import("@/views/admin/Home.vue"),
         meta: { requiresAuth: true, requiresAdmin: true },
       },
       {
         path: "/admin/users/add",
         component: import("@/components/AddUser.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
+      {
+        path: "/admin/users",
+        component: import("@/components/ViewUsers.vue"),
         meta: { requiresAuth: true, requiresAdmin: true },
       },
     ],

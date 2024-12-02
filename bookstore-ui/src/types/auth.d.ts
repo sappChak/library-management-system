@@ -1,8 +1,8 @@
-import { User } from './user';
+import { UserResponse } from './user';
 
 export interface AuthState {
   token: string | null;
-  user: User | null;
+  user: UserResponse | null;
 }
 
 export interface LoginCredentials {

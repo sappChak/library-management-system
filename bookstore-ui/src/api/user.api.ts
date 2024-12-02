@@ -1,13 +1,7 @@
-import { User } from "@/types";
+import { CreateUserRequest, UserResponse } from "@/types";
 import httpClient from "./http-client";
 
-interface CreateUserRequest {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export const fetchUsers = async (): Promise<User[]> => {
+export const fetchUsers = async (): Promise<UserResponse[]> => {
   const response = await httpClient.get("/users");
   const users = await response.data;
   return users;

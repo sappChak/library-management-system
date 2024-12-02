@@ -24,7 +24,6 @@
   </section>
 </template>
 
-
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchTransactions } from "@/api/transaction.api";
@@ -43,28 +42,32 @@ const fetchRecentActivities = async () => {
 onMounted(() => {
   fetchRecentActivities();
 });
-
 </script>
 
 <style scoped>
 .recent-activities {
-  background-color: #f9fafb;
+  background-color: #1c1c1c;
+  /* Dark background */
+  color: #f5f5f5;
+  /* Light text for contrast */
   padding: 30px;
   border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  /* Slight shadow for depth */
 }
 
 .recent-activities h2 {
   margin-bottom: 20px;
-  font-size: 24px;
-  color: #333;
+  font-size: 26px;
+  color: #ffffff;
+  /* White color for header */
   font-weight: 600;
-  border-bottom: 2px solid #d32f2f;
+  border-bottom: 2px solid #ffffff;
+  /* White border under header */
   padding-bottom: 10px;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: center;
-  /* Center-align the heading */
 }
 
 .activities-table {
@@ -75,52 +78,55 @@ onMounted(() => {
 }
 
 .activities-table thead {
-  background-color: #d32f2f;
-  color: white;
+  background-color: #333333;
+  /* Darker header for contrast */
+  color: #f5f5f5;
 }
 
 .activities-table th {
   text-align: center;
-  /* Center-align the header cells */
-  padding: 12px 20px;
-  font-size: 14px;
+  padding: 14px 20px;
+  font-size: 15px;
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .activities-table tbody {
-  background-color: #fff;
+  background-color: #2a2a2a;
+  /* Slightly lighter dark background */
 }
 
 .activities-table td {
   text-align: center;
-  /* Center-align the body cells */
-  padding: 12px 20px;
+  padding: 14px 20px;
   font-size: 14px;
-  color: #555;
+  color: #f5f5f5;
 }
 
 .activities-table tbody tr {
-  transition: background-color 0.2s ease, transform 0.2s ease;
+  transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .activities-table tbody tr:hover {
-  background-color: #f1f5f9;
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background-color: #444444;
+  /* Slight hover effect with lighter gray */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .activities-table tbody tr:nth-child(even) {
-  background-color: #f8f9fa;
+  background-color: #3a3a3a;
+  /* Alternating row color for even rows */
 }
 
 .activities-table tbody tr:nth-child(odd) {
-  background-color: #ffffff;
+  background-color: #2a2a2a;
+  /* Alternating row color for odd rows */
 }
 
 @media (max-width: 768px) {
   .activities-table {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .activities-table th,
@@ -129,7 +135,7 @@ onMounted(() => {
   }
 
   .recent-activities h2 {
-    font-size: 20px;
+    font-size: 22px;
   }
 }
 </style>
