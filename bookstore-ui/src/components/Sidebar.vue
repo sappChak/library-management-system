@@ -50,33 +50,39 @@ const toggleSidebar = () => {
 <style scoped>
 /* Sidebar Styles */
 .sidebar {
-  background-color: #1c1c1c;
+  background-color: #333;
+  /* Darker background for modern minimalism */
   color: #f5f5f5;
+  /* Light text color for contrast */
   width: 250px;
   min-height: 100vh;
   padding: 20px;
-  border-radius: 15px;
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+  /* Slightly rounded corners for a modern feel */
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
   transition: all 0.3s ease-in-out;
   overflow: hidden;
 }
 
 .sidebar.collapsed {
-  width: 80px;
+  width: 70px;
 }
 
 .header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #ffffff;
-  padding-bottom: 10px;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #444;
+  /* Lighter border */
+  padding-bottom: 12px;
 }
 
 .logo {
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  /* Clean, minimalistic font */
+  font-size: 1.4rem;
+  font-weight: 500;
   color: #ffffff;
   text-transform: uppercase;
   letter-spacing: 1px;
@@ -85,8 +91,8 @@ const toggleSidebar = () => {
 }
 
 .logo img {
-  height: 40px;
-  width: 40px;
+  height: 35px;
+  width: 35px;
   margin-right: 10px;
 }
 
@@ -96,37 +102,42 @@ const toggleSidebar = () => {
   color: #ffffff;
   font-size: 1.5rem;
   cursor: pointer;
+  transition: color 0.3s ease;
 }
 
 .toggle-btn:hover {
   color: #ff6f61;
+  /* Accent color */
 }
 
 /* Navigation Links */
 .nav-links {
-  margin-top: 20px;
+  margin-top: 15px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 10px;
 }
 
 .nav-link {
-  padding: 10px 15px;
-  border-radius: 10px;
-  font-size: 14px;
+  padding: 12px 18px;
+  border-radius: 8px;
+  font-size: 15px;
   color: #f5f5f5;
   text-decoration: none;
+  font-family: 'Roboto', sans-serif;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  display: block;
 }
 
 .nav-link:hover {
   background-color: #444444;
   transform: translateY(-2px);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .nav-link.active {
-  background-color: #333333;
+  background-color: #555555;
+  font-weight: 600;
 }
 
 /* Dropdown Styles */
@@ -141,39 +152,36 @@ const toggleSidebar = () => {
   padding: 12px 18px;
   font-size: 16px;
   text-align: left;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   width: 100%;
   cursor: pointer;
   border-radius: 8px;
   transition: background-color 0.3s ease;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .dropdown-btn:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .dropdown-list {
   list-style: none;
   padding: 0;
-  margin: 10px 0;
+  margin-top: 10px;
 }
 
 .dropdown-list li {
   margin-bottom: 8px;
 }
 
-.dropdown-list li:last-child {
-  margin-bottom: 0;
-}
-
 .dropdown-list a {
   color: white;
   text-decoration: none;
   padding: 10px 15px;
-  border-radius: 8px;
   display: block;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 8px;
   transition: background-color 0.3s ease;
 }
 
@@ -186,10 +194,12 @@ const toggleSidebar = () => {
   margin-top: auto;
   padding: 12px 20px;
   background-color: #ff6f61;
+  /* Modern accent color */
   color: #ffffff;
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   font-size: 14px;
+  font-weight: 500;
   cursor: pointer;
   width: calc(100% - 40px);
   transition: background-color 0.3s ease, transform 0.2s ease;
@@ -207,7 +217,7 @@ const toggleSidebar = () => {
   }
 
   .nav-links {
-    gap: 10px;
+    gap: 8px;
   }
 
   .nav-link {
