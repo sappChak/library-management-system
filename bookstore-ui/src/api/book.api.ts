@@ -38,11 +38,6 @@ export const returnBook = async (bookId: string): Promise<void> => {
 
 export const addBook = async (book: Book): Promise<void> => {
   await httpClient.post("/books", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
-    },
     body: JSON.stringify(book),
   });
 };
