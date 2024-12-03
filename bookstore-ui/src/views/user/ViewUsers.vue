@@ -57,8 +57,7 @@ const deleteUser = async (id: number) => {
     const confirmDelete = confirm('Are you sure you want to delete this user?')
     if (confirmDelete) {
       await deleteUserById(id)
-      users.value = users.value.filter((user) => user.id !== id) // Remove user locally
-      alert(`User with ID ${id} has been deleted successfully.`)
+      users.value = users.value.filter((user) => user.id !== id) 
     }
   } catch (error) {
     console.error('Failed to delete user:', error)
