@@ -3,10 +3,7 @@
     <Header :username="username" :email="email" />
     <section class="dashboard-widgets">
       <DashboardWidget title="Total Users" :value="totalUsers" />
-      <DashboardWidget
-        title="Books Available"
-        :value="numberOfAvailableBooks"
-      />
+      <DashboardWidget title="Books Available" :value="numberOfAvailableBooks" />
       <DashboardWidget title="Active Borrowers" :value="activeBorrowers" />
       <DashboardWidget title="Total Returns" :value="totalReturns" />
     </section>
