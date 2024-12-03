@@ -64,19 +64,16 @@ defineProps({
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  /* Ensure even spacing */
   height: 100vh;
   padding: 20px;
   background-color: #2c2c2c;
   overflow-y: hidden;
-  /* Prevent scrolling to make space for the logout button */
 }
 
 .content {
   flex: 1;
   overflow-y: auto;
   padding-bottom: 60px;
-  /* Leave space for the sticky logout button */
 }
 
 .sidebar.collapsed {
@@ -89,7 +86,6 @@ defineProps({
   justify-content: space-between;
   margin-bottom: 20px;
   border-bottom: 1px solid #3e3e3e;
-  /* Subtle border */
   padding-bottom: 12px;
 }
 
@@ -121,7 +117,6 @@ defineProps({
 
 .toggle-btn:hover {
   color: #ff6f61;
-  /* Accent color */
 }
 
 /* Navigation Links */
@@ -211,7 +206,6 @@ defineProps({
   bottom: 50px;
   padding: 12px 20px;
   background-color: #3e3e3e;
-  /* Match the sidebar border color */
   color: #eaeaea;
   border: none;
   border-radius: 8px;
@@ -227,7 +221,6 @@ defineProps({
 
 .logout:hover {
   background-color: #ff5a4b;
-  /* Attractive accent color */
   transform: translateY(-2px);
   color: #ffffff;
 }
