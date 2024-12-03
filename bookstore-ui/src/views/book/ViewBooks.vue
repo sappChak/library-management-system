@@ -18,7 +18,11 @@
           <td>{{ book.author }}</td>
           <td>{{ book.availableCopies }}</td>
           <td>
-            <button class="delete-btn" @click="deleteBook(book.id)" aria-label="Delete book">
+            <button
+              class="delete-btn"
+              @click="deleteBook(book.id)"
+              aria-label="Delete book"
+            >
               Delete
             </button>
           </td>
@@ -29,37 +33,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { deleteBookById, fetchAvailableBooks } from "@/api/book.api";
-import { BookResponse } from "@/types/book";
+import { ref, onMounted } from 'vue'
+import { deleteBookById, fetchAvailableBooks } from '@/services/book.service'
+import { BookResponse } from '@/types/book'
 
-const books = ref<BookResponse[]>([]);
+const books = ref<BookResponse[]>([])
 
 const fetchBooksData = async () => {
   try {
-    books.value = await fetchAvailableBooks();
+    books.value = await fetchAvailableBooks()
   } catch (error) {
-    console.error("Failed to fetch books:", error);
+    console.error('Failed to fetch books:', error)
   }
-};
+}
 
 const deleteBook = async (id: number) => {
   try {
-    const confirmDelete = confirm("Are you sure you want to delete this book?");
+    const confirmDelete = confirm('Are you sure you want to delete this book?')
     if (confirmDelete) {
-      await deleteBookById(id);
-      books.value = books.value.filter(book => book.id !== id);
-      alert(`Book with ID ${id} has been deleted successfully.`);
+      await deleteBookById(id)
+      books.value = books.value.filter((book) => book.id !== id)
+      alert(`Book with ID ${id} has been deleted successfully.`)
     }
   } catch (error) {
-    console.error("Failed to delete book:", error);
-    alert("Error deleting the book. Please try again.");
+    console.error('Failed to delete book:', error)
+    alert('Error deleting the book. Please try again.')
   }
 }
 
 onMounted(() => {
-  fetchBooksData();
-});
+  fetchBooksData()
+})
 </script>
 
 <style scoped>
@@ -115,7 +119,9 @@ onMounted(() => {
 }
 
 .books-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .books-table tbody tr:hover {
@@ -140,7 +146,9 @@ onMounted(() => {
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .delete-btn:hover {
@@ -148,8 +156,6 @@ onMounted(() => {
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
-
-
 
 @media (max-width: 768px) {
   .books-table {

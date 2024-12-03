@@ -25,23 +25,23 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { fetchTransactions } from "@/api/transaction.api";
-import { Transaction } from "@/types/transaction";
+import { ref, onMounted } from 'vue'
+import { fetchTransactions } from '@/services/transaction.service'
+import { Transaction } from '@/types/transaction'
 
-const recentTransactions = ref<Transaction[]>([]);
+const recentTransactions = ref<Transaction[]>([])
 
 const fetchRecentActivities = async () => {
   try {
-    recentTransactions.value = await fetchTransactions();
+    recentTransactions.value = await fetchTransactions()
   } catch (error) {
-    console.error("Failed to fetch recent activities:", error);
+    console.error('Failed to fetch recent activities:', error)
   }
-};
+}
 
 onMounted(() => {
-  fetchRecentActivities();
-});
+  fetchRecentActivities()
+})
 </script>
 
 <style scoped>
@@ -104,7 +104,9 @@ onMounted(() => {
 }
 
 .transactions-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .transactions-table tbody tr:hover {

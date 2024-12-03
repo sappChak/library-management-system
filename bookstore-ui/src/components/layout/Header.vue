@@ -8,11 +8,10 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps<{
+defineProps<{
   username: string
   email: string
 }>()
-
 </script>
 
 <style scoped>

@@ -23,7 +23,11 @@
             </span>
           </td>
           <td>
-            <button class="delete-btn" @click="deleteUser(user.id)" aria-label="Delete user">
+            <button
+              class="delete-btn"
+              @click="deleteUser(user.id)"
+              aria-label="Delete user"
+            >
               Delete
             </button>
           </td>
@@ -34,38 +38,37 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { fetchUsers, deleteUserById } from "@/api/user.api";
-import { UserResponse } from "@/types/user";
+import { ref, onMounted } from 'vue'
+import { fetchUsers, deleteUserById } from '@/services/user.service'
+import { UserResponse } from '@/types/user'
 
-const users = ref<UserResponse[]>([]);
+const users = ref<UserResponse[]>([])
 
 const fetchUsersData = async () => {
   try {
-    users.value = await fetchUsers();
+    users.value = await fetchUsers()
   } catch (error) {
-    console.error("Failed to fetch users:", error);
+    console.error('Failed to fetch users:', error)
   }
-};
+}
 
 const deleteUser = async (id: number) => {
   try {
-    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    const confirmDelete = confirm('Are you sure you want to delete this user?')
     if (confirmDelete) {
-      await deleteUserById(id);
-      users.value = users.value.filter(user => user.id !== id); // Remove user locally
-      alert(`User with ID ${id} has been deleted successfully.`);
+      await deleteUserById(id)
+      users.value = users.value.filter((user) => user.id !== id) // Remove user locally
+      alert(`User with ID ${id} has been deleted successfully.`)
     }
   } catch (error) {
-    console.error("Failed to delete user:", error);
-    alert("Error deleting the user. Please try again.");
+    console.error('Failed to delete user:', error)
+    alert('Error deleting the user. Please try again.')
   }
-};
+}
 
 onMounted(() => {
-  fetchUsersData();
-});
-
+  fetchUsersData()
+})
 </script>
 
 <style scoped>
@@ -122,7 +125,9 @@ onMounted(() => {
 }
 
 .users-table tbody tr {
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .users-table tbody tr:hover {
@@ -147,7 +152,9 @@ onMounted(() => {
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  transition: background-color 0.3s ease, transform 0.2s ease;
+  transition:
+    background-color 0.3s ease,
+    transform 0.2s ease;
 }
 
 .delete-btn:hover {

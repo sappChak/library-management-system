@@ -1,8 +1,6 @@
 <template>
   <div class="app-layout">
-    <!-- Sidebar -->
     <Sidebar :is-admin="authStore.isAdmin" @logout="logout" />
-    <!-- Main Content -->
     <div class="main-content">
       <router-view />
     </div>
@@ -10,22 +8,22 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from "@/store/auth.store";
-import Sidebar from "@/components/Sidebar.vue";
+import { useAuthStore } from '@/store/auth.store'
+import Sidebar from '@/components/layout/Sidebar.vue'
 
-const authStore = useAuthStore();
+const authStore = useAuthStore()
 
 const logout = () => {
-  authStore.logout();
-  window.location.reload();
-};
+  authStore.logout()
+  window.location.reload()
+}
 </script>
 
 <style scoped>
 .app-layout {
   display: flex;
   height: 100vh;
-  font-family: "Poppins", Arial, sans-serif;
+  font-family: 'Poppins', Arial, sans-serif;
   background-color: #f3f4f6;
   overflow: hidden;
 }
@@ -37,7 +35,7 @@ const logout = () => {
   overflow-y: auto;
 }
 
-.app-layout .sidebar.collapsed+.main-content {
+.app-layout .sidebar.collapsed + .main-content {
   margin-left: 80px;
 }
 </style>
