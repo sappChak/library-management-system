@@ -18,6 +18,7 @@ import { useAuthStore } from "@/store/auth.store";
 import DashboardWidget from "@/components/DashboardWidget.vue";
 import RecentTransactions from "@/components/RecentTransactions.vue";
 import Header from "@/components/Header.vue";
+import { fetchNumberOfAvailableBooks } from "@/api/book.api";
 
 const authStore = useAuthStore();
 
@@ -33,6 +34,7 @@ const fetchDashboardData = async () => {
   try {
     totalUsers.value = await fetchNumberOfUsers();
     activeBorrowers.value = await fetchNumberOfActiveBorrows();
+    numberOfAvailableBooks.value = await fetchNumberOfAvailableBooks();
     totalReturns.value = await fetchNumberOfReturns();
   } catch (error) {
     console.error("Failed to load dashboard data:", error);
