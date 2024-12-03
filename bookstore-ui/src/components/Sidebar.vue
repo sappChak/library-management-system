@@ -13,23 +13,31 @@
     </div>
 
     <nav class="nav-links">
-      <router-link to="/admin" class="nav-link" active-class="active">Home</router-link>
+      <router-link v-if="isAdmin" to="/admin/home" class="nav-link" active-class="active">Home</router-link>
+      <router-link v-else to="/user/home" class="nav-link" active-class="active">Home</router-link>
 
-      <Dropdown title="Manage Users">
+      <Dropdown v-if="isAdmin" title="Manage Users">
         <ul class="dropdown-list">
           <li><router-link to="/admin/users" class="nav-link">View Users</router-link></li>
           <li><router-link to="/admin/users/add" class="nav-link">Add User</router-link></li>
         </ul>
       </Dropdown>
 
-      <Dropdown title="Manage Books">
+      <Dropdown v-if="isAdmin" title="Manage Books">
         <ul class="dropdown-list">
           <li><router-link to="/admin/books" class="nav-link">View Books</router-link></li>
           <li><router-link to="/admin/books/add" class="nav-link">Add Book</router-link></li>
         </ul>
       </Dropdown>
-    </nav>
 
+      <Dropdown v-else title="Books">
+        <ul class="dropdown-list">
+          <li><router-link to="/books/available" class="nav-link">Available Books</router-link></li>
+          <li><router-link to="/books/borrowed" class="nav-link">My Borrowed Books</router-link></li>
+        </ul>
+      </Dropdown>
+
+    </nav>
     <button class="logout" @click="$emit('logout')" aria-label="Logout">Logout</button>
   </aside>
 </template>
@@ -43,22 +51,32 @@ const isCollapsed = ref(false);
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value;
 };
+
+defineProps({
+  isAdmin: Boolean,
+});
+
 </script>
 
 <style scoped>
 /* Sidebar Styles */
 .sidebar {
-  background-color: #2c2c2c;
-  /* Slightly lighter for a sleeker look */
-  color: #eaeaea;
-  /* Softer light text color */
-  width: 250px;
-  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* Ensure even spacing */
+  height: 100vh;
   padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease-in-out;
-  overflow: hidden;
+  background-color: #2c2c2c;
+  overflow-y: hidden;
+  /* Prevent scrolling to make space for the logout button */
+}
+
+.content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 60px;
+  /* Leave space for the sticky logout button */
 }
 
 .sidebar.collapsed {
@@ -108,9 +126,9 @@ const toggleSidebar = () => {
 
 /* Navigation Links */
 .nav-links {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
+  flex: 1;
   gap: 12px;
 }
 
@@ -189,33 +207,40 @@ const toggleSidebar = () => {
 
 /* Logout Button */
 .logout {
-  margin-top: auto;
+  position: sticky;
+  bottom: 50px;
   padding: 12px 20px;
-  background-color: transparent;
+  background-color: #3e3e3e;
+  /* Match the sidebar border color */
   color: #eaeaea;
   border: none;
   border-radius: 8px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
+  margin-top: 20px;
   width: calc(100% - 40px);
+  align-self: center;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
 }
 
 .logout:hover {
   background-color: #ff5a4b;
+  /* Attractive accent color */
   transform: translateY(-2px);
   color: #ffffff;
 }
 
-/* Responsive Styles */
+
 @media (max-width: 768px) {
   .sidebar {
     width: 100%;
+    padding: 15px;
   }
 
-  .nav-links {
-    gap: 8px;
+  .logout {
+    bottom: 15px;
   }
 
   .nav-link {
@@ -224,10 +249,6 @@ const toggleSidebar = () => {
 
   .dropdown-btn {
     font-size: 14px;
-  }
-
-  .logout {
-    padding: 10px 15px;
   }
 }
 </style>
