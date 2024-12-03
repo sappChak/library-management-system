@@ -1,7 +1,7 @@
 <template>
   <div class="app-layout">
     <!-- Sidebar -->
-    <Sidebar @logout="logout" />
+    <Sidebar :is-admin="authStore.isAdmin" @logout="logout" />
     <!-- Main Content -->
     <div class="main-content">
       <router-view />
