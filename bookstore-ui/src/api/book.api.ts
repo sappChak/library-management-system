@@ -40,6 +40,6 @@ export const addBook = async (book: CreateBookRequest): Promise<void> => {
   await httpClient.post("/books", book);
 };
 
-export const deleteBook = async (bookId: string): Promise<void> => {
+export const deleteBookById = async (bookId: number): Promise<void> => {
   await httpClient.delete(`/books/${bookId}`);
 };
