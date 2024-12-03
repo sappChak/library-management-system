@@ -44,9 +44,9 @@ const handleLogin = async () => {
     await authStore.login({ username: username.value, password: password.value });
 
     if (authStore.isAdmin) {
-      router.push("admin");
+      router.push("/admin/home");
     } else {
-      router.push("/dashboard");
+      router.push("/user/home");
     }
   } catch (error) {
     errorMessage.value = "Invalid username or password.";
