@@ -26,7 +26,6 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-@RolesAllowed("ADMIN")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
@@ -37,6 +36,7 @@ public class UserController {
     private final UserMapper userMapper;
 
     @Operation(summary = "Create a new user", description = "Registers a new user with roles")
+    @RolesAllowed("ADMIN")
     @PostMapping
     public ResponseEntity<UserResponse> createUser(
             @Valid @RequestBody UserRequest userRequest) {
@@ -46,6 +46,7 @@ public class UserController {
     }
 
     @Operation(summary = "Change user's permissions", description = "Assign or remove roles from a user")
+    @RolesAllowed("ADMIN")
     @PutMapping("/{userId}/roles")
     public ResponseEntity<UserResponse> changeUserRoles(
             @PathVariable Long userId,
@@ -63,6 +64,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get user by ID", description = "Retrieve details of a user by ID")
+    @RolesAllowed("ADMIN")
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
         var user = userService.getUserById(userId);
@@ -70,6 +72,7 @@ public class UserController {
     }
 
     @Operation(summary = "Get all users", description = "Retrieve a list of all users")
+    @RolesAllowed("ADMIN")
     @GetMapping
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         var users = userService.getAllUsers();
@@ -80,12 +83,14 @@ public class UserController {
     }
 
     @Operation(summary = "Get number of users", description = "Retrieve the number of users")
+    @RolesAllowed("ADMIN")
     @GetMapping("/count")
     public ResponseEntity<Long> getUsersCount() {
         return ResponseEntity.ok(userService.getUsersCount());
     }
 
     @Operation(summary = "Delete user", description = "Deletes a user by ID")
+    @RolesAllowed("ADMIN")
     @DeleteMapping("/{userId}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long userId) {
         userService.deleteUser(userId);
