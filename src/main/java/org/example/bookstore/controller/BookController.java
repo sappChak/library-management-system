@@ -36,6 +36,7 @@ public class BookController {
     private final BookMapper bookMapper;
 
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
+    @RolesAllowed("ADMIN")
     @PostMapping
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
         Book book = bookService.addBook(bookMapper.toEntity(createBookRequest));
@@ -106,6 +107,7 @@ public class BookController {
     }
 
     @Operation(summary = "Delete a book", description = "Delete a book by its ID.")
+    @RolesAllowed("ADMIN")
     @DeleteMapping("/{bookId}")
     public ResponseEntity<Void> deleteBook(@PathVariable Long bookId) {
         bookService.deleteBook(bookId);
