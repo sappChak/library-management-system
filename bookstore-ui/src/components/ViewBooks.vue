@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import { fetchAvailableBooks } from "@/api/book.api";
+import { deleteBookById, fetchAvailableBooks } from "@/api/book.api";
 import { BookResponse } from "@/types/book";
 
 const books = ref<BookResponse[]>([]);
@@ -45,15 +45,15 @@ const fetchBooksData = async () => {
 
 const deleteBook = async (id: number) => {
   try {
-    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    const confirmDelete = confirm("Are you sure you want to delete this book?");
     if (confirmDelete) {
-      await deleteBook(id);
+      await deleteBookById(id);
       books.value = books.value.filter(book => book.id !== id);
       alert(`Book with ID ${id} has been deleted successfully.`);
     }
   } catch (error) {
-    console.error("Failed to delete user:", error);
-    alert("Error deleting the user. Please try again.");
+    console.error("Failed to delete book:", error);
+    alert("Error deleting the book. Please try again.");
   }
 }
 
