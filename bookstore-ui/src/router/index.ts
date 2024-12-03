@@ -29,6 +29,11 @@ const routes = [
         component: import("@/components/ViewBooks.vue"),
         meta: { requiresAuth: true, requiresAdmin: true },
       },
+      {
+        path: "/admin/books/add",
+        component: import("@/components/AddBook.vue"),
+        meta: { requiresAuth: true, requiresAdmin: true },
+      },
     ],
   },
 ];
