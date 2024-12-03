@@ -8,6 +8,7 @@
           <th>Title</th>
           <th>Author</th>
           <th>Available Copies</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -16,6 +17,11 @@
           <td>{{ book.title }}</td>
           <td>{{ book.author }}</td>
           <td>{{ book.availableCopies }}</td>
+          <td>
+            <button class="delete-btn" @click="deleteBook(book.id)" aria-label="Delete book">
+              Delete
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
@@ -25,9 +31,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { fetchAvailableBooks } from "@/api/book.api";
-import { Book } from "@/types/book";
+import { BookResponse } from "@/types/book";
 
-const books = ref<Book[]>([]);
+const books = ref<BookResponse[]>([]);
 
 const fetchBooksData = async () => {
   try {
@@ -36,6 +42,20 @@ const fetchBooksData = async () => {
     console.error("Failed to fetch books:", error);
   }
 };
+
+const deleteBook = async (id: number) => {
+  try {
+    const confirmDelete = confirm("Are you sure you want to delete this user?");
+    if (confirmDelete) {
+      await deleteBook(id);
+      books.value = books.value.filter(book => book.id !== id);
+      alert(`Book with ID ${id} has been deleted successfully.`);
+    }
+  } catch (error) {
+    console.error("Failed to delete user:", error);
+    alert("Error deleting the user. Please try again.");
+  }
+}
 
 onMounted(() => {
   fetchBooksData();
@@ -111,6 +131,25 @@ onMounted(() => {
 .books-table tbody tr:nth-child(odd) {
   background-color: #2a2a2a;
 }
+
+.delete-btn {
+  background-color: #ff6f61;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.delete-btn:hover {
+  background-color: #ff4a36;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
 
 @media (max-width: 768px) {
   .books-table {
