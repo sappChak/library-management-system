@@ -53,3 +53,4 @@ gradle-app.settings
 *.war
 *.ear
 !build/libs/*.jar  # Ignore all jars except built outputs if needed for deployment
+bin/generated-sources
