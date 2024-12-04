@@ -8,6 +8,8 @@ import org.example.bookstore.entity.enums.ActionType;
 import org.example.bookstore.repository.BookRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -47,8 +49,8 @@ public class BookService {
         bookRepository.deleteById(bookId);
     }
 
-    public List<Book> getAvailableBooks() {
-        return bookRepository.findByAvailableCopiesGreaterThan(0);
+    public Page<Book> getAvailableBooks(int page, int size) {
+        return bookRepository.findByAvailableCopiesGreaterThan(0, PageRequest.of(page, size));
     }
 
     public Long getAvailableBooksCount() {
