@@ -5,7 +5,7 @@ import { AuthState, LoginCredentials, RegisterCredentials } from '@/types'
 export const useAuthStore = defineStore('auth', {
   state: (): AuthState => ({
     token: localStorage.getItem('token') || null,
-    user: JSON.parse(localStorage.getItem('user') || 'null'),
+    user: null,
   }),
 
   actions: {
@@ -33,9 +33,7 @@ export const useAuthStore = defineStore('auth', {
 
     async fetchUserProfile() {
       try {
-        const user = await getUserProfile()
-        this.user = user
-        localStorage.setItem('user', JSON.stringify(user))
+        this.user = await getUserProfile()
       } catch (error) {
         console.error('Failed to fetch user profile:', error)
         throw error
@@ -46,7 +44,6 @@ export const useAuthStore = defineStore('auth', {
       this.token = null
       this.user = null
       localStorage.removeItem('token')
-      localStorage.removeItem('user')
     },
   },
 
