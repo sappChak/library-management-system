@@ -2,6 +2,7 @@
   <div class="app-layout">
     <Sidebar :is-admin="authStore.isAdmin" @logout="logout" />
     <div class="main-content">
+      <Header :username="username" :email="email" />
       <router-view />
     </div>
   </div>
@@ -10,8 +11,12 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/store/auth.store'
 import Sidebar from '@/components/layout/Sidebar.vue'
+import Header from '@/components/layout/Header.vue'
 
 const authStore = useAuthStore()
+
+const username = authStore.user?.username || 'Error'
+const email = authStore.user?.email || ''
 
 const logout = () => {
   authStore.logout()
