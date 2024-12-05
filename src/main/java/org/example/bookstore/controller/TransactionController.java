@@ -3,9 +3,12 @@ package org.example.bookstore.controller;
 import java.util.List;
 
 import org.example.bookstore.dto.response.transaction.GetTransactionResponse;
+import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.TransactionMapper;
 import org.example.bookstore.service.TransactionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +44,21 @@ public class TransactionController {
     @GetMapping("/returned/count")
     public ResponseEntity<Long> getActiveReturnsCount() {
         return ResponseEntity.ok(transactionService.getTotalReturnedBooksCount());
+    }
+
+    @Operation(summary = "Get transactions by current user", description = "Retrieve a list of transactions by authenticatied user.")
+    @GetMapping("/me")
+    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User userDetails = (User) authentication.getPrincipal();
+            userId = userDetails.getId();
+        }
+
+        return ResponseEntity
+                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
     }
 
     @Operation(summary = "Delete a transaction", description = "Delete atransaction byits ID.")
