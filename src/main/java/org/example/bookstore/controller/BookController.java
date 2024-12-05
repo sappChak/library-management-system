@@ -38,7 +38,6 @@ public class BookController {
     private final BookMapper bookMapper;
 
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
-    @RolesAllowed("ADMIN")
     @PostMapping
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
         Book book = bookService.addBook(bookMapper.toEntity(createBookRequest));
@@ -57,6 +56,13 @@ public class BookController {
     public ResponseEntity<Page<GetBookResponse>> getAvailableBooksPaginated(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(bookMapper.toResponseDtoPage(bookService.getAvailableBooks(page, size)));
+    }
+
+    @Operation(summary = "Search books by title, author or isbn", description = "Search books by title, author or ISBN.")
+    @GetMapping("/search")
+    public ResponseEntity<Page<GetBookResponse>> searchBooks(@RequestParam String query,
+            @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
+        return ResponseEntity.ok(bookMapper.toResponseDtoPage(bookService.searchBooks(query, page, size)));
     }
 
     @Operation(summary = "Get number of available books", description = "Retrieve the number of books available in the library.")

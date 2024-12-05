@@ -11,11 +11,12 @@ public interface BookRepository extends JpaRepository<Book, Long> {
 
     boolean existsByIsbn(String isbn);
 
-    Page<Book> findByAvailableCopiesGreaterThan(int availableCopies, Pageable pageable);
+    Long countByAvailableCopiesGreaterThan(int availableCopies);
 
     List<Book> findByTitleContainingIgnoreCase(String query);
 
-    List<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String titleQuery, String authorQuery);
+    Page<Book> findByAvailableCopiesGreaterThan(int availableCopies, Pageable pageable);
 
-    Long countByAvailableCopiesGreaterThan(int availableCopies);
+    Page<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String titleQuery, String authorQuery,
+            Pageable pageable);
 }

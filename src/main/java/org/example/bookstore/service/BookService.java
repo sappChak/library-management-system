@@ -57,8 +57,9 @@ public class BookService {
         return bookRepository.countByAvailableCopiesGreaterThan(0);
     }
 
-    public List<Book> searchBooks(String title) {
-        return bookRepository.findByTitleContainingIgnoreCase(title);
+    public Page<Book> searchBooks(String query, int page, int size) {
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query,
+                PageRequest.of(page, size));
     }
 
     @Transactional
