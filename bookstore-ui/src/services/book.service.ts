@@ -1,10 +1,47 @@
 import { BookResponse, CreateBookRequest } from '@/types'
 import httpClient from './http-client.service'
 
-export const fetchAvailableBooks = async (): Promise<BookResponse[]> => {
-  const response = await httpClient.get('/books/available')
-  const books = await response.data
-  return books
+export interface PaginatedBooksResponse {
+  data: BookResponse[]
+  totalPages: number
+  totalElements: number
+}
+
+export const fetchAvailableBooks = async (
+  page: number,
+  size: number,
+): Promise<PaginatedBooksResponse> => {
+  const response = await httpClient.get('books/available/paginated', {
+    params: {
+      page: page - 1,
+      size,
+    },
+  })
+  return {
+    data: response.data.content,
+    totalPages: response.data.totalPages,
+    totalElements: response.data.totalElements,
+  }
+}
+
+export const searchBooks = async (
+  page: number,
+  size: number,
+  query: string,
+): Promise<PaginatedBooksResponse> => {
+  const response = await httpClient.get('books/search', {
+    params: {
+      page: page - 1,
+      size,
+      query,
+    },
+  })
+  console.log(response)
+  return {
+    data: response.data.content,
+    totalPages: response.data.totalPages,
+    totalElements: response.data.totalElements,
+  }
 }
 
 export const fetchBorrowedBooks = async (): Promise<BookResponse[]> => {
