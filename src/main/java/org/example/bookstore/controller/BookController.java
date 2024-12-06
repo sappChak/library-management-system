@@ -52,10 +52,16 @@ public class BookController {
     }
 
     @Operation(summary = "Get paginated available books", description = "Retrieve a paginated list of books available in the library.")
-    @GetMapping("/available/paginated")
+    @GetMapping("/available")
     public ResponseEntity<Page<GetBookResponse>> getAvailableBooksPaginated(@RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(bookMapper.toResponseDtoPage(bookService.getAvailableBooks(page, size)));
+    }
+
+    @Operation(summary = "Get number of available books", description = "Retrieve the number of books available in the library.")
+    @GetMapping("/available/count")
+    public ResponseEntity<Long> getAvailableBooksCount() {
+        return ResponseEntity.ok(bookService.getAvailableBooksCount());
     }
 
     @Operation(summary = "Search books by title, author or isbn", description = "Search books by title, author or ISBN.")
@@ -63,12 +69,6 @@ public class BookController {
     public ResponseEntity<Page<GetBookResponse>> searchBooks(@RequestParam String query,
             @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size) {
         return ResponseEntity.ok(bookMapper.toResponseDtoPage(bookService.searchBooks(query, page, size)));
-    }
-
-    @Operation(summary = "Get number of available books", description = "Retrieve the number of books available in the library.")
-    @GetMapping("/available/count")
-    public ResponseEntity<Long> getAvailableBooksCount() {
-        return ResponseEntity.ok(bookService.getAvailableBooksCount());
     }
 
     @Operation(summary = "Borrow a book", description = "Borrow a book from the library.")
