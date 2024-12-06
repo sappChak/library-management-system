@@ -9,19 +9,19 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store/auth.store'
-import Sidebar from '@/components/layout/Sidebar.vue'
-import Header from '@/components/layout/Header.vue'
+import { useAuthStore } from '@/store/auth.store';
+import Sidebar from '@/components/layout/Sidebar.vue';
+import Header from '@/components/layout/Header.vue';
 
-const authStore = useAuthStore()
+const authStore = useAuthStore();
 
-const username = authStore.user?.username || 'Error'
-const email = authStore.user?.email || ''
+const username = authStore.user?.username || 'Error';
+const email = authStore.user?.email || '';
 
 const logout = () => {
-  authStore.logout()
-  window.location.reload()
-}
+  authStore.logout();
+  window.location.reload();
+};
 </script>
 
 <style scoped>
