@@ -85,6 +85,12 @@ public class BookService {
                 .toList();
     }
 
+    public Long getBorrowedBooksCount(Long userId) {
+        return transactionService.getTransactionsWithActiveBorrow(userId).stream()
+                .filter(transaction -> transaction.getAction() == ActionType.BORROW)
+                .count();
+    }
+
     @Transactional
     public void returnBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)

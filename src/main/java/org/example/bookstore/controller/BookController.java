@@ -78,6 +78,20 @@ public class BookController {
         return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getBorrowedBooks(userId)));
     }
 
+    @Operation(summary = "Get borrowed books count", description = "Retrieve the number of books borrowed by me.")
+    @GetMapping("/borrowed/count")
+    public ResponseEntity<Long> getBorrowedBooksCount() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User userDetails = (User) authentication.getPrincipal();
+            userId = userDetails.getId();
+        }
+
+        return ResponseEntity.ok(bookService.getBorrowedBooksCount(userId));
+    }
+
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
     @PostMapping
     public ResponseEntity<GetBookResponse> addBook(@Valid @RequestBody CreateBookRequest createBookRequest) {
