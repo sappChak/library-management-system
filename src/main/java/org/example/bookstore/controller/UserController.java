@@ -36,26 +36,6 @@ public class UserController {
     private final UserService userService;
     private final UserMapper userMapper;
 
-    @Operation(summary = "Create a new user", description = "Registers a new user with roles")
-    @RolesAllowed("ADMIN")
-    @PostMapping
-    public ResponseEntity<CreateUserResponse> createUser(
-            @Valid @RequestBody CreateUserRequest userRequest) {
-        var user = userMapper.toEntity(userRequest);
-        var savedUser = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponse(savedUser));
-    }
-
-    @Operation(summary = "Change user's permissions", description = "Assign or remove roles from a user")
-    @RolesAllowed("ADMIN")
-    @PutMapping("/{userId}/roles")
-    public ResponseEntity<CreateUserResponse> changeUserRoles(
-            @PathVariable Long userId,
-            @Valid @RequestBody ChangeUserRolesRequest newRoles) {
-        var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
-        return ResponseEntity.ok(userMapper.toResponse(savedUser));
-    }
-
     @Operation(summary = "Get current user", description = "Retrieve details of the currently authenticated user")
     @GetMapping("/me")
     public ResponseEntity<CreateUserResponse> getCurrentUser() {
@@ -87,6 +67,26 @@ public class UserController {
     @GetMapping("/count")
     public ResponseEntity<Long> getUsersCount() {
         return ResponseEntity.ok(userService.getUsersCount());
+    }
+
+    @Operation(summary = "Create a new user", description = "Registers a new user with roles")
+    @RolesAllowed("ADMIN")
+    @PostMapping
+    public ResponseEntity<CreateUserResponse> createUser(
+            @Valid @RequestBody CreateUserRequest userRequest) {
+        var user = userMapper.toEntity(userRequest);
+        var savedUser = userService.createUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponse(savedUser));
+    }
+
+    @Operation(summary = "Change user's permissions", description = "Assign or remove roles from a user")
+    @RolesAllowed("ADMIN")
+    @PutMapping("/{userId}/roles")
+    public ResponseEntity<CreateUserResponse> changeUserRoles(
+            @PathVariable Long userId,
+            @Valid @RequestBody ChangeUserRolesRequest newRoles) {
+        var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
+        return ResponseEntity.ok(userMapper.toResponse(savedUser));
     }
 
     @Operation(summary = "Edit user by id", description = "Edit user details by ID")
