@@ -4,7 +4,6 @@ import java.util.Set;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -14,19 +13,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Data Transfer Object for creating or updating a user")
-public class UserRequest {
+public class UpdateUserRequest {
 
-        @Schema(description = "Unique username for the user", example = "konotop_401", required = true)
-        @NotBlank
+        @Schema(description = "Unique username for the user", example = "konotop_401")
         private String username;
 
-        @Schema(description = "User's email address", example = "konotop401@gmail.com", required = true)
+        @Schema(description = "User's email address", example = "konotop401@gmail.com")
         @Email
-        @NotBlank
         private String email;
 
-        @Schema(description = "User's password", example = "securepassword123", required = true)
-        @NotBlank
+        @Schema(description = "User's password", example = "securepassword123")
         @Size(min = 8, message = "Password must be at least 8 characters")
         private String password;
 

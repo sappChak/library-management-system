@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Schema(description = "Data Transfer Object for returning user details")
-public class UserResponse {
+public class CreateUserResponse {
 
     @Schema(description = "Unique ID of the user", example = "1")
     private Long id;
