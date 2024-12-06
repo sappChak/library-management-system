@@ -4,8 +4,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.example.bookstore.dto.request.user.ChangeUserRolesRequest;
-import org.example.bookstore.dto.request.user.UserRequest;
-import org.example.bookstore.dto.response.user.UserResponse;
+import org.example.bookstore.dto.request.user.CreateUserRequest;
+import org.example.bookstore.dto.request.user.UpdateUserRequest;
+import org.example.bookstore.dto.response.user.CreateUserResponse;
 import org.example.bookstore.mapper.UserMapper;
 import org.example.bookstore.service.UserService;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,8 @@ public class UserController {
     @Operation(summary = "Create a new user", description = "Registers a new user with roles")
     @RolesAllowed("ADMIN")
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(
-            @Valid @RequestBody UserRequest userRequest) {
+    public ResponseEntity<CreateUserResponse> createUser(
+            @Valid @RequestBody CreateUserRequest userRequest) {
         var user = userMapper.toEntity(userRequest);
         var savedUser = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.toResponse(savedUser));
@@ -48,7 +49,7 @@ public class UserController {
     @Operation(summary = "Change user's permissions", description = "Assign or remove roles from a user")
     @RolesAllowed("ADMIN")
     @PutMapping("/{userId}/roles")
-    public ResponseEntity<UserResponse> changeUserRoles(
+    public ResponseEntity<CreateUserResponse> changeUserRoles(
             @PathVariable Long userId,
             @Valid @RequestBody ChangeUserRolesRequest newRoles) {
         var savedUser = userService.changeUserRoles(userId, newRoles.getRoleIds());
@@ -57,7 +58,7 @@ public class UserController {
 
     @Operation(summary = "Get current user", description = "Retrieve details of the currently authenticated user")
     @GetMapping("/me")
-    public ResponseEntity<UserResponse> getCurrentUser() {
+    public ResponseEntity<CreateUserResponse> getCurrentUser() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
         var user = userService.getUserByUsername(authentication.getName());
         return ResponseEntity.ok(userMapper.toResponse(user));
@@ -66,7 +67,7 @@ public class UserController {
     @Operation(summary = "Get user by ID", description = "Retrieve details of a user by ID")
     @RolesAllowed("ADMIN")
     @GetMapping("/{userId}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long userId) {
+    public ResponseEntity<CreateUserResponse> getUserById(@PathVariable Long userId) {
         var user = userService.getUserById(userId);
         return ResponseEntity.ok(userMapper.toResponse(user));
     }
@@ -74,9 +75,8 @@ public class UserController {
     @Operation(summary = "Get all users", description = "Retrieve a list of all users")
     @RolesAllowed("ADMIN")
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        var users = userService.getAllUsers();
-        var response = users.stream()
+    public ResponseEntity<List<CreateUserResponse>> getAllUsers() {
+        var response = userService.getAllUsers().stream()
                 .map(userMapper::toResponse)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(response);
@@ -87,6 +87,15 @@ public class UserController {
     @GetMapping("/count")
     public ResponseEntity<Long> getUsersCount() {
         return ResponseEntity.ok(userService.getUsersCount());
+    }
+
+    @Operation(summary = "Edit user by id", description = "Edit user details by ID")
+    @RolesAllowed("ADMIN")
+    @PutMapping("/{userId}")
+    public ResponseEntity<CreateUserResponse> editUser(@PathVariable Long userId,
+            @Valid @RequestBody UpdateUserRequest userRequest) {
+        var user = userMapper.updateUserFromRequest(userRequest, userService.getUserById(userId));
+        return ResponseEntity.ok(userMapper.toResponse(userService.saveUser(user)));
     }
 
     @Operation(summary = "Delete user", description = "Deletes a user by ID")

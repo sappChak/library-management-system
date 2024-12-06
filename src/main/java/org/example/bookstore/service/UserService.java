@@ -99,23 +99,9 @@ public class UserService {
         }
     }
 
-    public User updateUser(Long id, User user) {
-        logger.info("Updating user with ID: {}", id);
-
-        var existingUser = getUserById(id);
-
-        validateUpdateEmail(existingUser.getEmail(), user.getEmail());
-        validateUpdateUsername(existingUser.getUsername(), user.getUsername());
-
-        existingUser.setUsername(user.getUsername());
-        existingUser.setEmail(user.getEmail());
-
-        if (user.getPassword() != null) {
-            existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
-        }
-
-        existingUser.setRoles(user.getRoles());
-        return userRepository.save(existingUser);
+    public User saveUser(User user) {
+        logger.info("Updating user with ID: {}", user.getId());
+        return userRepository.save(user);
     }
 
     public User changeUserRoles(Long id, Set<Long> roleIds) {
@@ -146,17 +132,4 @@ public class UserService {
         return existingUser;
     }
 
-    private void validateUpdateEmail(String existingEmail, String newEmail) {
-        if (!existingEmail.equals(newEmail) && userRepository.existsByEmail(newEmail)) {
-            logger.warn("Attempted to update email to an existing email: {}", newEmail);
-            throw new UserExistsException("Email already in use. Please use a different email.");
-        }
-    }
-
-    private void validateUpdateUsername(String existingUsername, String newUsername) {
-        if (!existingUsername.equals(newUsername) && userRepository.existsByUsername(newUsername)) {
-            logger.warn("Attempted to update username to an existing username: {}", newUsername);
-            throw new UserExistsException("Username already in use. Please choose a different username.");
-        }
-    }
 }
