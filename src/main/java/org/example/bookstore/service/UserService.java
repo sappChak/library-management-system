@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -38,8 +37,8 @@ public class UserService {
             user.getRoles().add(roleService.getRoleByName("ROLE_USER"));
         }
 
+        logger.info("Saving new user: {}", user.getEmail());
         try {
-            logger.info("Saving new user: {}", user.getEmail());
             return userRepository.save(user);
         } catch (Exception e) {
             logger.error("Error saving user: {}", e.getMessage());
@@ -50,7 +49,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserById(Long id) {
         logger.info("Fetching user by ID: {}", id);
-
         return userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with ID: " + id));
     }
@@ -58,7 +56,6 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserByUsername(String username) {
         logger.info("Fetching user by username: {}", username);
-
         return userRepository.findUserByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with username: " + username));
     }
@@ -99,8 +96,9 @@ public class UserService {
         }
     }
 
+    @Transactional
     public User saveUser(User user) {
-        logger.info("Updating user with ID: {}", user.getId());
+        logger.debug("Updated user details: {}", user);
         return userRepository.save(user);
     }
 
