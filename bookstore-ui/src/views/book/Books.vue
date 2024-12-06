@@ -2,7 +2,6 @@
   <div class="books-page">
     <h1 class="page-title">Available Books</h1>
     <div class="search-bar">
-      <!-- Call onSearchInput when user types in the search bar -->
       <input
         v-model="searchQuery"
         @input="onSearchInput"
@@ -49,91 +48,91 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted } from 'vue';
 import {
   borrowBookById,
   fetchAvailableBooks,
   searchBooks,
-} from '@/services/book.service'
-import { debounce } from 'lodash'
-import { BookResponse } from '@/types'
+} from '@/services/book.service';
+import { debounce } from 'lodash';
+import { BookResponse } from '@/types';
 
-const books = ref<BookResponse[]>([])
-const filteredBooks = ref<BookResponse[]>([])
-const searchQuery = ref('')
-const currentPage = ref(1)
-const totalPages = ref(0)
-const pageSize = 10
-let isSearching = ref(false)
+const books = ref<BookResponse[]>([]);
+const filteredBooks = ref<BookResponse[]>([]);
+const searchQuery = ref('');
+const currentPage = ref(1);
+const totalPages = ref(0);
+const pageSize = 10;
+let isSearching = ref(false);
 
 const fetchBooks = async (page: number) => {
   try {
-    const response = await fetchAvailableBooks(page, pageSize)
-    books.value = response.data
-    totalPages.value = response.totalPages
-    filteredBooks.value = books.value
+    const response = await fetchAvailableBooks(page, pageSize);
+    books.value = response.data;
+    totalPages.value = response.totalPages;
+    filteredBooks.value = books.value;
   } catch (error) {
-    console.error('Error fetching books:', error)
+    console.error('Error fetching books:', error);
   }
-}
+};
 
 const filterBooks = async () => {
   if (!searchQuery.value.trim()) {
-    isSearching.value = false
-    fetchBooks(currentPage.value)
-    return
+    isSearching.value = false;
+    fetchBooks(currentPage.value);
+    return;
   }
 
-  isSearching.value = true
+  isSearching.value = true;
   try {
     const response = await searchBooks(
       currentPage.value,
       pageSize,
       searchQuery.value,
-    )
-    filteredBooks.value = response.data
-    totalPages.value = response.totalPages
+    );
+    filteredBooks.value = response.data;
+    totalPages.value = response.totalPages;
   } catch (error) {
-    console.error('Error searching books:', error)
-    alert('Failed to fetch search results. Please try again later.')
+    console.error('Error searching books:', error);
+    alert('Failed to fetch search results. Please try again later.');
   }
-}
+};
 
 const borrowBook = async (bookId: number) => {
   try {
-    await borrowBookById(bookId)
-    books.value = books.value.filter((book) => book.id !== bookId)
+    await borrowBookById(bookId);
+    books.value = books.value.filter((book) => book.id !== bookId);
     filteredBooks.value = filteredBooks.value.filter(
       (book) => book.id !== bookId,
-    )
+    );
   } catch (error) {
-    console.error('Error borrowing book:', error)
-    alert('Failed to borrow the book. Please try again later.')
+    console.error('Error borrowing book:', error);
+    alert('Failed to borrow the book. Please try again later.');
   }
-}
+};
 
 const changePage = (page: number) => {
   if (page > 0 && page <= totalPages.value) {
-    currentPage.value = page
+    currentPage.value = page;
     if (isSearching.value) {
-      filterBooks()
+      filterBooks();
     } else {
-      fetchBooks(page)
+      fetchBooks(page);
     }
   }
-}
+};
 
 const debouncedFilterBooks = debounce(() => {
-  filterBooks()
-}, 300)
+  filterBooks();
+}, 300);
 
 const onSearchInput = () => {
-  debouncedFilterBooks()
-}
+  debouncedFilterBooks();
+};
 
 onMounted(() => {
-  fetchBooks(currentPage.value)
-})
+  fetchBooks(currentPage.value);
+});
 </script>
 
 <style scoped>
@@ -148,7 +147,7 @@ onMounted(() => {
 .page-title {
   font-size: 2.5rem;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   text-align: center;
   color: #000000;
 }
@@ -156,7 +155,7 @@ onMounted(() => {
 .search-bar {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
+  margin-bottom: 50px;
 }
 
 .search-input {

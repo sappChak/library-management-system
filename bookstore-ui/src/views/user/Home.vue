@@ -3,36 +3,31 @@
     <section class="dashboard-widgets">
       <Widget title="My Borrowed Books" :value="borrowedBooks" />
       <Widget title="Books Due Soon" :value="dueSoonBooks" />
-      <Widget title="Fines Pending" :value="pendingFines" />
     </section>
-    <MyRecentActivities />
+    <MyRecentTransactions />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useAuthStore } from '@/store/auth.store'
-import Widget from '@/components/ui/Widget.vue'
+import { ref, onMounted } from 'vue';
+import { fetchBorrowedBooksCount } from '@/services';
+import Widget from '@/components/ui/Widget.vue';
+import MyRecentTransactions from '@/views/user/MyRecentTransactions.vue';
 
-const authStore = useAuthStore()
-
-const borrowedBooks = ref(0)
-const dueSoonBooks = ref(0)
-const pendingFines = ref(0)
+const borrowedBooks = ref(0);
+const dueSoonBooks = ref(1);
 
 const fetchUserDashboardData = async () => {
   try {
-    // borrowedBooks.value = await fetchMyBorrowedBooks();
-    // dueSoonBooks.value = await fetchBooksDueSoon();
-    // pendingFines.value = await fetchPendingFines();
+    borrowedBooks.value = await fetchBorrowedBooksCount();
   } catch (error) {
-    console.error('Failed to load user dashboard data:', error)
+    console.error('Failed to load user dashboard data:', error);
   }
-}
+};
 
 onMounted(() => {
-  fetchUserDashboardData()
-})
+  fetchUserDashboardData();
+});
 </script>
 
 <style scoped>

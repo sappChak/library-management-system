@@ -25,46 +25,41 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { fetchTransactions } from '@/services/transaction.service'
-import { Transaction } from '@/types/transaction'
+import { ref, onMounted } from 'vue';
+import { fetchTransactions } from '@/services/transaction.service';
+import { Transaction } from '@/types/transaction';
 
-const recentTransactions = ref<Transaction[]>([])
+const recentTransactions = ref<Transaction[]>([]);
 
 const fetchRecentActivities = async () => {
   try {
-    recentTransactions.value = await fetchTransactions()
+    recentTransactions.value = await fetchTransactions();
   } catch (error) {
-    console.error('Failed to fetch recent activities:', error)
+    console.error('Failed to fetch recent activities:', error);
   }
-}
+};
 
 onMounted(() => {
-  fetchRecentActivities()
-})
+  fetchRecentActivities();
+});
 </script>
 
 <style scoped>
 .recent-transactions {
   background-color: #1c1c1c;
-  /* Dark background */
   color: #f5f5f5;
-  /* Light text for contrast */
   padding: 30px;
   border-radius: 15px;
   box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
-  /* Slight shadow for depth */
 }
 
 .recent-transactions h2 {
   margin-bottom: 20px;
   font-size: 26px;
   color: #ffffff;
-  /* White color for header */
   font-weight: 600;
   border-bottom: 2px solid #ffffff;
-  /* White border under header */
-  padding-bottom: 10px;
+  padding-bottom: 40px;
   text-transform: uppercase;
   letter-spacing: 1px;
   text-align: center;
@@ -79,7 +74,6 @@ onMounted(() => {
 
 .transactions-table thead {
   background-color: #333333;
-  /* Darker header for contrast */
   color: #f5f5f5;
 }
 
@@ -93,7 +87,6 @@ onMounted(() => {
 
 .transactions-table tbody {
   background-color: #2a2a2a;
-  /* Slightly lighter dark background */
 }
 
 .transactions-table td {
@@ -111,19 +104,16 @@ onMounted(() => {
 
 .transactions-table tbody tr:hover {
   background-color: #444444;
-  /* Slight hover effect with lighter gray */
   transform: translateY(-2px);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .transactions-table tbody tr:nth-child(even) {
   background-color: #3a3a3a;
-  /* Alternating row color for even rows */
 }
 
 .transactions-table tbody tr:nth-child(odd) {
   background-color: #2a2a2a;
-  /* Alternating row color for odd rows */
 }
 
 @media (max-width: 768px) {

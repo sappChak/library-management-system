@@ -41,12 +41,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { addUser } from '@/services/user.service'
+import { ref } from 'vue';
+import { addUser } from '@/services/user.service';
 
-const username = ref('')
-const email = ref('')
-const password = ref('')
+const username = ref('');
+const email = ref('');
+const password = ref('');
 
 const handleSubmit = async () => {
   try {
@@ -54,17 +54,17 @@ const handleSubmit = async () => {
       username: username.value,
       email: email.value,
       password: password.value,
-    }
-    await addUser(user)
-    alert('User added successfully!')
-    username.value = ''
-    email.value = ''
-    password.value = ''
+    };
+    await addUser(user);
+    alert('User added successfully!');
+    username.value = '';
+    email.value = '';
+    password.value = '';
   } catch (error) {
-    console.error('Error adding user:', error)
-    alert('Failed to add user. Please try again.')
+    console.error('Error adding user:', error);
+    alert('Failed to add user. Please try again.');
   }
-}
+};
 </script>
 
 <style scoped>
