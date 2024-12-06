@@ -1,48 +1,75 @@
 # Bookstore API
 
-A Spring Boot application providing a RESTful API for managing a bookstore. Includes book management, user accounts, authentication with JWT, and transaction handling.
+A Spring Boot application providing a RESTful API for managing a library system. This API supports book management, user accounts, JWT-based authentication, and transaction handling for borrowing and returning books.
+
+---
 
 ## Features
 
-- **Books**: Borrow, return, and manage books.
-- **Users**: Manage user accounts.
-- **Authentication**: JWT-based authentication.
-- **Transactions**: Track borrowing and returning of books.
+### Books
+- Borrow and return books.
+- Manage book inventory.
+
+### Users
+- Create and manage user accounts.
+- View borrowing history and account details.
+
+### Authentication
+- Secure JWT-based authentication.
+- Role-based access control for users and admins.
+
+### Transactions
+- Track borrowing and returning activities.
+- Log transaction details.
+
+---
+
+## Getting Started
+
+### Prerequisites
+- [Docker](https://www.docker.com/get-started) (optional, for containerized setup).
+- Java 17 or higher.
+- Gradle (if not using Docker).
+
+---
 
 ## Running the Application
 
-### With Docker
+### Using Docker
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/bookstore-api.git
+   git clone git@github.com:Tuesaday-15-00-17-00-semestr-work/semester-work-assignment-tuesday-15-00-17-50-konotop-solo.git
    cd bookstore-api
    ```
 
-2. Start the app:
+2. Start the application:
    ```bash
    docker-compose up --build
    ```
 
-3. Access the Swagger UI: [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+3. Open Swagger UI to explore the API:
+   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
-### Without Docker (Gradle-based)
+   ![Swagger UI](images/swagger.png)
+
+### Running Locally (Without Docker)
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/your-repo/bookstore-api.git
+   git clone git@github.com:Tuesaday-15-00-17-00-semestr-work/semester-work-assignment-tuesday-15-00-17-50-konotop-solo.git
    cd bookstore-api
    ```
 
-2. Create the SQLite database directory:
-   ```bash
-   mkdir data
-   ```
-
-3. Run the app:
+2. Start the application:
    ```bash
    ./gradlew bootRun
    ```
+
+3. Access the Swagger UI:
+   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+
+---
 
 ## Testing the Application
 
@@ -51,55 +78,36 @@ Run unit and integration tests:
 ./gradlew test
 ```
 
-## Endpoints Overview
+---
 
-The API provides the following main endpoints, as seen in the Swagger UI:
+## API Documentation
 
-### Books
+The API is documented using Swagger. Once the application is running, access the documentation at:
 
-- `GET /api/books`: Retrieve all books.
-- `POST /api/books`: Add a new book.
-- `POST /api/books/return/{bookId}`: Return a borrowed book.
-- `POST /api/books/borrow/{bookId}`: Borrow a book.
-- `GET /api/books/borrowed`: View borrowed books.
-- `GET /api/books/available`: List available books.
-- `DELETE /api/books/{bookId}`: Delete a book.
-
-### Users
-
-- `GET /api/users/{userId}`: Retrieve a user by ID.
-- `PUT /api/users/{userId}`: Update an existing user.
-- `DELETE /api/users/{userId}`: Delete a user.
-- `GET /api/users`: Retrieve all users.
-- `POST /api/users`: Create a new user.
-
-### Authentication
-
-- `POST /api/auth/register`: Register a new user.
-- `POST /api/auth/login`: Log in and receive a JWT.
-
-### Transactions
-
-- `GET /api/transactions`: View all transactions.
-- `GET /api/transactions/user/{userId}`: View transactions for a specific user.
-- `DELETE /api/transactions/{transactionId}`: Delete a transaction by ID.
-
-## Environment Variables
-
-- `SPRING_DATASOURCE_URL`: SQLite database URL (e.g., `jdbc:sqlite:/app/data/app.db`).
-- `SPRING_DATASOURCE_DRIVER_CLASS_NAME`: Database driver class (default: `org.sqlite.JDBC`).
-- `SPRING_JPA_HIBERNATE_DDL_AUTO`: Database initialization strategy (e.g., `update`).
-- `SECURITY_JWT_SECRET`: Secret key for signing JWT tokens.
-- `APP_ADMIN_USERNAME`, `APP_ADMIN_PASSWORD`, `APP_ADMIN_EMAIL`: Default admin user credentials.
+[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ## Database
 
-The application uses SQLite as its database. The database file is stored in the `./data` directory.
+The application uses SQLite as the database. The database file is stored in the `./data` directory.
 
-## Admin User
+### Schema
+The database schema is auto-generated and includes tables for:
+- Users
+- Books
+- Transactions
+- Roles
 
-By default, the application initializes an admin user upon startup. The credentials are configurable via environment variables:
+---
 
-- Username: `APP_ADMIN_USERNAME`
-- Password: `APP_ADMIN_PASSWORD`
-- Email: `APP_ADMIN_EMAIL`
+## Configuration
+
+The application can be configured via `src/main/resources/application.properties`.
+
+### Default Admin User
+An admin user is initialized during startup with configurable credentials:
+
+```properties
+app.admin.username=admin
+app.admin.password=securepassword
+app.admin.email=admin228@gmail.com
+```
