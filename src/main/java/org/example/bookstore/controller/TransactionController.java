@@ -34,6 +34,13 @@ public class TransactionController {
         return ResponseEntity.ok(transactionMapper.toResponseDtoList(transactionService.getAllTransactions()));
     }
 
+    @Operation(summary = "Get transactions by user ID", description = "Retrieve a list of transactions by user.")
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId(@PathVariable Long userId) {
+        return ResponseEntity
+                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
+    }
+
     @Operation(summary = "Get number of active borrowings", description = "Retrieve a number of active borrowings.")
     @GetMapping("/active/count")
     public ResponseEntity<Long> getActiveBorrowingsCount() {
@@ -68,10 +75,4 @@ public class TransactionController {
         return ResponseEntity.noContent().build();
     }
 
-    @Operation(summary = "Get transactions by user ID", description = "Retrieve a list of transactions by user.")
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId(@PathVariable Long userId) {
-        return ResponseEntity
-                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
-    }
 }
