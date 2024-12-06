@@ -54,23 +54,23 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store/auth.store'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth.store';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const authStore = useAuthStore()
-const router = useRouter()
+const authStore = useAuthStore();
+const router = useRouter();
 
-const email = ref('')
-const username = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const isSubmitting = ref(false)
-const errorMessage = ref('')
+const email = ref('');
+const username = ref('');
+const password = ref('');
+const confirmPassword = ref('');
+const isSubmitting = ref(false);
+const errorMessage = ref('');
 
 const handleRegister = async () => {
-  isSubmitting.value = true
-  errorMessage.value = ''
+  isSubmitting.value = true;
+  errorMessage.value = '';
 
   try {
     await authStore.register({
@@ -78,14 +78,14 @@ const handleRegister = async () => {
       username: username.value,
       password: password.value,
       confirmPassword: confirmPassword.value,
-    })
-    router.push('/login')
+    });
+    router.push('/login');
   } catch (error: any) {
-    errorMessage.value = error.message
+    errorMessage.value = error.message;
   } finally {
-    isSubmitting.value = false
+    isSubmitting.value = false;
   }
-}
+};
 </script>
 
 <style scoped>

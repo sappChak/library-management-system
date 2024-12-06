@@ -92,18 +92,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import Dropdown from '@/components/ui/Dropdown.vue'
+import { ref } from 'vue';
+import Dropdown from '@/components/ui/Dropdown.vue';
 
-const isCollapsed = ref(false)
+const isCollapsed = ref(false);
 
 const toggleSidebar = () => {
-  isCollapsed.value = !isCollapsed.value
-}
+  isCollapsed.value = !isCollapsed.value;
+};
 
 defineProps({
   isAdmin: Boolean,
-})
+});
 </script>
 
 <style scoped>

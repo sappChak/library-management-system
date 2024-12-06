@@ -55,27 +55,27 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { addBook } from '@/services/book.service'
-import { CreateBookRequest } from '@/types/book'
+import { ref } from 'vue';
+import { addBook } from '@/services/book.service';
+import { CreateBookRequest } from '@/types/book';
 
 const book = ref<CreateBookRequest>({
   title: '',
   author: '',
   isbn: '', // Added ISBN field
   availableCopies: 1,
-})
+});
 
 const submitBook = async () => {
   try {
-    await addBook(book.value)
-    alert('Book added successfully!')
-    book.value = { title: '', author: '', isbn: '', availableCopies: 1 } // Reset the form
+    await addBook(book.value);
+    alert('Book added successfully!');
+    book.value = { title: '', author: '', isbn: '', availableCopies: 1 }; // Reset the form
   } catch (error) {
-    console.error('Failed to add book:', error)
-    alert('Error adding the book. Please try again.')
+    console.error('Failed to add book:', error);
+    alert('Error adding the book. Please try again.');
   }
-}
+};
 </script>
 
 <style scoped>

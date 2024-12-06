@@ -36,39 +36,39 @@
 </template>
 
 <script setup lang="ts">
-import { useAuthStore } from '@/store/auth.store'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/store/auth.store';
+import { ref } from 'vue';
+import { useRouter } from 'vue-router';
 
-const authStore = useAuthStore()
-const router = useRouter()
+const authStore = useAuthStore();
+const router = useRouter();
 
-const username = ref('')
-const password = ref('')
-const isSubmitting = ref(false)
-const errorMessage = ref('')
+const username = ref('');
+const password = ref('');
+const isSubmitting = ref(false);
+const errorMessage = ref('');
 
 const handleLogin = async () => {
-  isSubmitting.value = true
-  errorMessage.value = ''
+  isSubmitting.value = true;
+  errorMessage.value = '';
 
   try {
     await authStore.login({
       username: username.value,
       password: password.value,
-    })
+    });
 
     if (authStore.isAdmin) {
-      router.push('/admin/home')
+      router.push('/admin/home');
     } else {
-      router.push('/user/home')
+      router.push('/user/home');
     }
   } catch (error) {
-    errorMessage.value = 'Invalid username or password.'
+    errorMessage.value = 'Invalid username or password.';
   } finally {
-    isSubmitting.value = false
+    isSubmitting.value = false;
   }
-}
+};
 </script>
 
 <style scoped>

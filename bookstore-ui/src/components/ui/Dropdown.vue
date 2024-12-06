@@ -8,16 +8,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref } from 'vue';
 
 defineProps({
   title: String,
-})
+});
 
-const isOpen = ref(false)
+const isOpen = ref(false);
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value
-}
+  isOpen.value = !isOpen.value;
+};
 </script>
 
 <style scoped>

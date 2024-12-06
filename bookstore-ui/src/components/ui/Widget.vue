@@ -9,7 +9,7 @@
 defineProps({
   title: String,
   value: [String, Number],
-})
+});
 </script>
 
 <style scoped>

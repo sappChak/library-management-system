@@ -9,9 +9,9 @@
 
 <script setup lang="ts">
 defineProps<{
-  username: string
-  email: string
-}>()
+  username: string;
+  email: string;
+}>();
 </script>
 
 <style scoped>

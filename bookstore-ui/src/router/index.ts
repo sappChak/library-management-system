@@ -1,5 +1,5 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import { authGuard } from './auth.guard'
+import { createRouter, createWebHistory } from 'vue-router';
+import { authGuard } from './auth.guard';
 
 const routes = [
   { path: '/login', component: import('@/views/auth/Login.vue') },
@@ -52,13 +52,13 @@ const routes = [
       },
     ],
   },
-]
+];
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
-})
+});
 
-router.beforeEach(authGuard)
+router.beforeEach(authGuard);
 
-export default router
+export default router;
