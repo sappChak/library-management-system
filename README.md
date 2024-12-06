@@ -58,7 +58,7 @@ A Spring Boot application providing a RESTful API for managing a library system.
 1. Clone the repository:
    ```bash
    git clone git@github.com:Tuesaday-15-00-17-00-semestr-work/semester-work-assignment-tuesday-15-00-17-50-konotop-solo.git
-   cd bookstore-api
+   cd semester-work-assignment-tuesday-15-00-17-50-konotop-solo
    ```
 
 2. Start the application:
