@@ -41,6 +41,19 @@ public class TransactionController {
                 .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
     }
 
+    @Operation(summary = "Get transactions by current user", description = "Retrieve a list of transactions by authenticated user.")
+    @GetMapping("/me")
+    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Long userId = null;
+        if (authentication != null && authentication.getPrincipal() instanceof User) {
+            User userDetails = (User) authentication.getPrincipal();
+            userId = userDetails.getId();
+        }
+        return ResponseEntity
+                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
+    }
+
     @Operation(summary = "Get number of active borrowings", description = "Retrieve a number of active borrowings.")
     @GetMapping("/active/count")
     public ResponseEntity<Long> getActiveBorrowingsCount() {
@@ -51,21 +64,6 @@ public class TransactionController {
     @GetMapping("/returned/count")
     public ResponseEntity<Long> getActiveReturnsCount() {
         return ResponseEntity.ok(transactionService.getTotalReturnedBooksCount());
-    }
-
-    @Operation(summary = "Get transactions by current user", description = "Retrieve a list of transactions by authenticatied user.")
-    @GetMapping("/me")
-    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
-            userId = userDetails.getId();
-        }
-
-        return ResponseEntity
-                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
     }
 
     @Operation(summary = "Delete a transaction", description = "Delete atransaction byits ID.")
