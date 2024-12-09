@@ -29,19 +29,7 @@ public class TransactionService {
     public void recordTransaction(Long userId, Book book, ActionType action) {
         User user = userService.getUserById(userId);
 
-        boolean hasActiveBorrow = transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
-                userId, book.getId(), ActionType.BORROW, true);
-
-        if (action == ActionType.BORROW && hasActiveBorrow) {
-            logger.error("User {} already has an active borrow transaction for book {}", user.getUsername(),
-                    book.getTitle());
-            throw new IllegalArgumentException("You already have an active borrow transaction for this book.");
-        }
-
-        if (action == ActionType.RETURN && !hasActiveBorrow) {
-            logger.error("User {} hasn't borrowed book {}", user.getUsername(), book.getTitle());
-            throw new IllegalArgumentException("You cannot return a book you haven't borrowed.");
-        }
+        validateTransaction(userId, book, action);
 
         Transaction transaction = new Transaction();
         transaction.setUser(user);
@@ -49,18 +37,14 @@ public class TransactionService {
         transaction.setAction(action);
         transaction.setDate(LocalDateTime.now());
 
-        logger.info("Recording transaction for user {} for book {} with action {}", user.getUsername(), book.getTitle(),
-                action);
-
         if (action == ActionType.RETURN) {
-            Transaction activeBorrow = transactionRepository.findFirstByUserIdAndBookIdAndActionAndIsActive(
-                    userId, book.getId(), ActionType.BORROW, true);
-            activeBorrow.setActive(false);
-            transactionRepository.save(activeBorrow);
+            deactivateBorrowTransaction(userId, book.getId());
         } else if (action == ActionType.BORROW) {
             transaction.setActive(true);
         }
 
+        logger.info("Recording transaction for user {} for book {} with action {}",
+                user.getUsername(), book.getTitle(), action);
         transactionRepository.save(transaction);
     }
 
@@ -94,5 +78,30 @@ public class TransactionService {
             throw new EntityNotFoundException("Transaction not found with ID: " + transactionId);
         }
         transactionRepository.deleteById(transactionId);
+    }
+
+    // Helper methods
+    private void validateTransaction(Long userId, Book book, ActionType action) {
+        boolean hasActiveBorrow = transactionRepository.existsByUserIdAndBookIdAndActionAndIsActive(
+                userId, book.getId(), ActionType.BORROW, true);
+
+        if (action == ActionType.BORROW && hasActiveBorrow) {
+            logger.error("User {} already has an active borrow transaction for book {}", userId, book.getTitle());
+            throw new IllegalArgumentException("You already have an active borrow transaction for this book.");
+        }
+
+        if (action == ActionType.RETURN && !hasActiveBorrow) {
+            logger.error("User {} hasn't borrowed book {}", userId, book.getTitle());
+            throw new IllegalArgumentException("You cannot return a book you haven't borrowed.");
+        }
+    }
+
+    private void deactivateBorrowTransaction(Long userId, Long bookId) {
+        Transaction activeBorrow = transactionRepository.findFirstByUserIdAndBookIdAndActionAndIsActive(
+                userId, bookId, ActionType.BORROW, true);
+        if (activeBorrow != null) {
+            activeBorrow.setActive(false);
+            transactionRepository.save(activeBorrow);
+        }
     }
 }
