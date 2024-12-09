@@ -12,8 +12,16 @@
 import { useAuthStore } from '@/store/auth.store';
 import Sidebar from '@/components/layout/Sidebar.vue';
 import Header from '@/components/layout/Header.vue';
+import { useRouter } from 'vue-router';
 
 const authStore = useAuthStore();
+const router = useRouter();
+
+if (authStore.isAdmin) {
+  router.push('/admin/home');
+} else {
+  router.push('/user/home');
+}
 
 const username = authStore.user?.username || 'Error';
 const email = authStore.user?.email || '';
