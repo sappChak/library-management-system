@@ -3,12 +3,11 @@ package org.example.bookstore.controller;
 import java.util.List;
 
 import org.example.bookstore.dto.response.transaction.GetTransactionResponse;
-import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.TransactionMapper;
+import org.example.bookstore.security.CustomUserDetails;
 import org.example.bookstore.service.TransactionService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,14 +42,11 @@ public class TransactionController {
 
     @Operation(summary = "Get transactions by current user", description = "Retrieve a list of transactions by authenticated user.")
     @GetMapping("/me")
-    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
-            userId = userDetails.getId();
-        }
+    public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
         return ResponseEntity
-                .ok(transactionMapper.toResponseDtoList(transactionService.getTransactionsByUserId(userId)));
+                .ok(transactionMapper
+                        .toResponseDtoList(transactionService.getTransactionsByUserId(userDetails.getId())));
     }
 
     @Operation(summary = "Get number of active borrowings", description = "Retrieve a number of active borrowings.")

@@ -5,14 +5,13 @@ import java.util.List;
 import org.example.bookstore.dto.request.book.CreateBookRequest;
 import org.example.bookstore.dto.response.book.GetBookResponse;
 import org.example.bookstore.entity.Book;
-import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.BookMapper;
+import org.example.bookstore.security.CustomUserDetails;
 import org.example.bookstore.service.BookService;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -66,26 +65,15 @@ public class BookController {
 
     @Operation(summary = "Get borrowed books", description = "Retrieve a list of books borrowed by me.")
     @GetMapping("/borrowed")
-    public ResponseEntity<List<GetBookResponse>> getBorrowedBooks() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
-            userId = userDetails.getId();
-        }
-
-        return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getBorrowedBooks(userId)));
+    public ResponseEntity<List<GetBookResponse>> getBorrowedBooks(
+            @AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(bookMapper.toResponseDtoList(bookService.getBorrowedBooks(userDetails.getId())));
     }
 
     @Operation(summary = "Get borrowed books count", description = "Retrieve the number of books borrowed by me.")
     @GetMapping("/borrowed/count")
-    public ResponseEntity<Long> getBorrowedBooksCount() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
-            userId = userDetails.getId();
-        }
-        return ResponseEntity.ok(bookService.getBorrowedBooksCount(userId));
+    public ResponseEntity<Long> getBorrowedBooksCount(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        return ResponseEntity.ok(bookService.getBorrowedBooksCount(userDetails.getId()));
     }
 
     @Operation(summary = "Add a new book", description = "Provide the details of the book to add it to the library.")
@@ -97,25 +85,17 @@ public class BookController {
 
     @Operation(summary = "Borrow a book", description = "Borrow a book from the library.")
     @PostMapping("/borrow/{bookId}")
-    public ResponseEntity<Void> borrowBook(@PathVariable Long bookId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
-            userId = userDetails.getId();
-        }
-        bookService.borrowBook(bookId, userId);
+    public ResponseEntity<Void> borrowBook(@AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long bookId) {
+        bookService.borrowBook(bookId, userDetails.getId());
         return ResponseEntity.noContent().build();
     }
 
     @Operation(summary = "Return a book", description = "Return a borrowed book to the library.")
     @PostMapping("/return/{bookId}")
-    public ResponseEntity<Void> returnBook(@PathVariable Long bookId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Long userId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
-            userId = userDetails.getId();
-        }
-        bookService.returnBook(bookId, userId);
+    public ResponseEntity<Void> returnBook(@AuthenticationPrincipal CustomUserDetails userDetails,
+            @PathVariable Long bookId) {
+        bookService.returnBook(bookId, userDetails.getId());
         return ResponseEntity.noContent().build();
     }
 

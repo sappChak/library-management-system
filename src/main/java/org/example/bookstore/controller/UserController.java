@@ -7,11 +7,13 @@ import org.example.bookstore.dto.request.user.ChangeUserRolesRequest;
 import org.example.bookstore.dto.request.user.CreateUserRequest;
 import org.example.bookstore.dto.request.user.UpdateUserRequest;
 import org.example.bookstore.dto.response.user.CreateUserResponse;
+import org.example.bookstore.entity.User;
 import org.example.bookstore.mapper.UserMapper;
+import org.example.bookstore.security.CustomUserDetails;
 import org.example.bookstore.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -38,9 +40,8 @@ public class UserController {
 
     @Operation(summary = "Get current user", description = "Retrieve details of the currently authenticated user")
     @GetMapping("/me")
-    public ResponseEntity<CreateUserResponse> getCurrentUser() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var user = userService.getUserByUsername(authentication.getName());
+    public ResponseEntity<CreateUserResponse> getCurrentUser(@AuthenticationPrincipal CustomUserDetails userDetails) {
+        User user = userService.getUserByUsername(userDetails.getUsername());
         return ResponseEntity.ok(userMapper.toResponse(user));
     }
 
