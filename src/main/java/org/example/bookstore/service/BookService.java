@@ -42,40 +42,12 @@ public class BookService {
         return bookRepository.findAll();
     }
 
-    public void deleteBook(Long bookId) {
-        if (!bookRepository.existsById(bookId)) {
-            throw new EntityNotFoundException("Book not found with ID: " + bookId);
-        }
-        bookRepository.deleteById(bookId);
-    }
-
     public Page<Book> getAvailableBooks(int page, int size) {
         return bookRepository.findByAvailableCopiesGreaterThan(0, PageRequest.of(page, size));
     }
 
     public Long getAvailableBooksCount() {
         return bookRepository.countByAvailableCopiesGreaterThan(0);
-    }
-
-    public Page<Book> searchBooks(String query, int page, int size) {
-        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query,
-                PageRequest.of(page, size));
-    }
-
-    @Transactional
-    public void borrowBook(Long bookId, Long userId) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
-
-        if (book.getAvailableCopies() == 0) {
-            logger.error("No available copies of book with id: {}.", bookId);
-            throw new IllegalArgumentException("No available copies of this book.");
-        }
-
-        transactionService.recordTransaction(userId, book, ActionType.BORROW);
-
-        book.setAvailableCopies(book.getAvailableCopies() - 1);
-        bookRepository.save(book);
     }
 
     public List<Book> getBorrowedBooks(Long userId) {
@@ -91,14 +63,40 @@ public class BookService {
                 .count();
     }
 
+    public Page<Book> searchBooks(String query, int page, int size) {
+        return bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(query, query,
+                PageRequest.of(page, size));
+    }
+
+    @Transactional
+    public void borrowBook(Long bookId, Long userId) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
+
+        if (book.getAvailableCopies() == 0) {
+            logger.error("No available copies of book with ID: {}.", bookId);
+            throw new IllegalArgumentException("No available copies of this book.");
+        }
+
+        transactionService.recordTransaction(userId, book, ActionType.BORROW);
+        book.setAvailableCopies(book.getAvailableCopies() - 1);
+        bookRepository.save(book);
+    }
+
     @Transactional
     public void returnBook(Long bookId, Long userId) {
         Book book = bookRepository.findById(bookId)
                 .orElseThrow(() -> new EntityNotFoundException("Book not found with ID: " + bookId));
 
         transactionService.recordTransaction(userId, book, ActionType.RETURN);
-
         book.setAvailableCopies(book.getAvailableCopies() + 1);
         bookRepository.save(book);
+    }
+
+    public void deleteBook(Long bookId) {
+        if (!bookRepository.existsById(bookId)) {
+            throw new EntityNotFoundException("Book not found with ID: " + bookId);
+        }
+        bookRepository.deleteById(bookId);
     }
 }
