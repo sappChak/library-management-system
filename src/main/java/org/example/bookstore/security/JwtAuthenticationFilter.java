@@ -3,7 +3,6 @@ package org.example.bookstore.security;
 import java.io.IOException;
 import java.util.Collection;
 
-import org.example.bookstore.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
                 Long userId = jwtTokenProvider.getUserIdFromToken(jwt);
 
-                User userDetails = customUserDetailService.loadUserById(userId);
+                var userDetails = customUserDetailService.loadUserById(userId);
                 Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
                 logger.debug("User {} with authorities {} authenticated", userDetails.getUsername(),

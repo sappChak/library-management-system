@@ -5,7 +5,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.example.bookstore.entity.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,7 +32,7 @@ public class JwtTokenProvider {
     }
 
     public String generateToken(Authentication authentication) {
-        User user = (User) authentication.getPrincipal();
+        CustomUserDetails user = (CustomUserDetails) authentication.getPrincipal();
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
@@ -64,18 +63,19 @@ public class JwtTokenProvider {
     }
 
     public Long getUserIdFromToken(String token) {
-        return extractAllClaims(token).get("id", Long.class);
+        Claims claims = extractAllClaims(token);
+        return Long.parseLong(claims.getSubject()); // 'sub' maps to the user ID
     }
 
     public String getUsernameFromToken(String token) {
         return extractAllClaims(token).get("username", String.class);
     }
 
-    private Map<String, Object> createClaimsMap(User user) {
+    private Map<String, Object> createClaimsMap(CustomUserDetails userDetails) {
         Map<String, Object> claimsMap = new HashMap<>();
-        claimsMap.put("id", user.getId());
-        claimsMap.put("username", user.getUsername());
-        claimsMap.put("roles", user.getAuthorities());
+        claimsMap.put("id", userDetails.getId());
+        claimsMap.put("username", userDetails.getUsername());
+        claimsMap.put("roles", userDetails.getAuthorities());
         return claimsMap;
     }
 
