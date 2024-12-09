@@ -19,13 +19,11 @@ import org.mapstruct.Named;
 public interface UserMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     @Mapping(target = "roles", ignore = true)
     User toEntity(SignupRequest createUserRequestDTO);
 
     @Mapping(target = "id", ignore = true)
     @Mapping(target = "roles", ignore = true)
-    @Mapping(target = "authorities", ignore = true)
     User toEntity(CreateUserRequest userRequest);
 
     @Mapping(source = "roles", target = "roles", qualifiedByName = "roleToStringSet")
