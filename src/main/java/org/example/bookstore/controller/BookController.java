@@ -70,8 +70,7 @@ public class BookController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
 
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
             userId = userDetails.getId();
         }
 
@@ -83,12 +82,9 @@ public class BookController {
     public ResponseEntity<Long> getBorrowedBooksCount() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
             userId = userDetails.getId();
         }
-
         return ResponseEntity.ok(bookService.getBorrowedBooksCount(userId));
     }
 
@@ -104,12 +100,9 @@ public class BookController {
     public ResponseEntity<Void> borrowBook(@PathVariable Long bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
             userId = userDetails.getId();
         }
-
         bookService.borrowBook(bookId, userId);
         return ResponseEntity.noContent().build();
     }
@@ -119,12 +112,9 @@ public class BookController {
     public ResponseEntity<Void> returnBook(@PathVariable Long bookId) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
-
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
             userId = userDetails.getId();
         }
-
         bookService.returnBook(bookId, userId);
         return ResponseEntity.noContent().build();
     }

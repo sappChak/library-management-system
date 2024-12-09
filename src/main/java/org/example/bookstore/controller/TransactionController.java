@@ -46,8 +46,7 @@ public class TransactionController {
     public ResponseEntity<List<GetTransactionResponse>> getTransactionsByUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Long userId = null;
-        if (authentication != null && authentication.getPrincipal() instanceof User) {
-            User userDetails = (User) authentication.getPrincipal();
+        if (authentication != null && authentication.getPrincipal() instanceof User userDetails) {
             userId = userDetails.getId();
         }
         return ResponseEntity
