@@ -56,9 +56,6 @@ A Spring Boot application providing a RESTful API for managing a library system.
    docker-compose up --build
    ```
 
-3. Once the app is running, access the Swagger UI to explore the API:
-   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
-
 ### Option 2: Running Locally Without Docker
 
 1. Clone the repository:
@@ -73,9 +70,6 @@ A Spring Boot application providing a RESTful API for managing a library system.
    ```bash
    ./gradlew bootRun
    ```
-
-3. Once the app is running, access the Swagger UI:
-   [http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
 
 ---
 
