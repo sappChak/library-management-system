@@ -95,7 +95,7 @@ Tests include validation of book management, authentication, role-based access c
 
 The API is documented using Swagger. Once the application is running, you can explore the full API and make test requests via the Swagger UI:
 
-[http://localhost:8080/swagger-ui.html](http://localhost:8080/swagger-ui.html)
+[http://localhost:8080/swagger-ui/index.html](http://localhost:8080/swagger-ui/index.html)
 
 ---
 
