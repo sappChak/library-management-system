@@ -1,10 +1,11 @@
 package org.example.bookstore.service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import org.example.bookstore.entity.User;
+import org.example.bookstore.entity.enums.ERole;
 import org.example.bookstore.exception.UserExistsException;
 import org.example.bookstore.repository.UserRepository;
 import org.slf4j.Logger;
@@ -19,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -33,9 +35,8 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        if (user.getRoles().isEmpty()) {
-            user.getRoles().add(roleService.getRoleByName("ROLE_USER"));
-        }
+        logger.info("Assigning default role: ROLE_USER");
+        user.setRoles(Arrays.asList(roleService.getRoleByName(ERole.ROLE_USER)));
 
         logger.info("Saving new user: {}", user.getEmail());
         try {
@@ -103,8 +104,6 @@ public class UserService {
     }
 
     public User changeUserRoles(Long id, Set<Long> roleIds) {
-        logger.info("Changing roles for user with ID: {}", id);
-
         var existingUser = userRepository.findById(id)
                 .orElseThrow(() -> {
                     logger.warn("Attempted to change roles for non-existent user with ID: {}", id);
@@ -112,19 +111,14 @@ public class UserService {
                 });
 
         var rolesToAdd = roleService.getRolesByIds(roleIds);
-
         var existingRoles = existingUser.getRoles();
 
-        var newRoles = rolesToAdd.stream()
-                .filter(role -> !existingRoles.contains(role))
-                .collect(Collectors.toSet());
-
-        if (newRoles.isEmpty()) {
+        if (rolesToAdd.isEmpty()) {
             logger.info("No new roles to add for user ID: {}", id);
         } else {
-            logger.info("Adding new roles for user ID {}: {}", id, newRoles);
-            existingRoles.addAll(newRoles);
-            userRepository.save(existingUser);
+            logger.info("Adding new roles for user ID {}: {}", id, rolesToAdd);
+            existingRoles.addAll(rolesToAdd);
+            this.saveUser(existingUser);
         }
 
         return existingUser;

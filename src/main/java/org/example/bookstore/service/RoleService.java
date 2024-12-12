@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.example.bookstore.entity.Role;
+import org.example.bookstore.entity.enums.ERole;
 import org.example.bookstore.repository.RoleRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class RoleService {
 
     private final RoleRepository roleRepository;
 
-    public Role getRoleByName(String roleName) {
+    public Role getRoleByName(ERole roleName) {
         return roleRepository.findByName(roleName)
                 .orElseThrow(() -> new RuntimeException("Role not found with name: " + roleName));
     }
@@ -28,7 +29,7 @@ public class RoleService {
         return roleRepository.findAll();
     }
 
-    public List<Role> getRolesByName(Set<String> roleNames) {
+    public List<Role> getRolesByName(Set<ERole> roleNames) {
         return roleRepository.findAllByNameIn(roleNames);
     }
 }
