@@ -1,5 +1,6 @@
 package org.example.bookstore.mapper;
 
+import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -33,7 +34,9 @@ public interface UserMapper {
     User updateUserFromRequest(UpdateUserRequest userRequest, @MappingTarget User user);
 
     @Named("roleToStringSet")
-    default Set<String> roleToStringSet(Set<Role> roles) {
-        return roles.stream().map(Role::getName).collect(Collectors.toSet());
+    default Set<String> roleToStringSet(Collection<Role> roles) {
+        return roles.stream()
+                .map(role -> role.getName().name())
+                .collect(Collectors.toSet());
     }
 }
