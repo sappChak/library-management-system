@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: bookstore 
+    container_name: library-management-system-api 
     ports:
       - "8080:8080"
     volumes:

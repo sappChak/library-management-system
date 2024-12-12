@@ -1,4 +1,4 @@
-# Bookstore API
+# Library management system API
 
 A Spring Boot application providing a RESTful API for managing a library system. The API supports book management, user accounts, JWT-based authentication, role-based access control, and transaction handling for borrowing and returning books.
 
@@ -46,8 +46,8 @@ A Spring Boot application providing a RESTful API for managing a library system.
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:Tuesaday-15-00-17-00-semestr-work/semester-work-assignment-tuesday-15-00-17-50-konotop-solo.git
-   cd bookstore-api
+   git clone git@github.com:sappChak/library-management-system.git
+   cd library-management-system
    ```
 
 2. Build and run the application with Docker:
@@ -61,8 +61,8 @@ A Spring Boot application providing a RESTful API for managing a library system.
 1. Clone the repository:
 
    ```bash
-   git clone git@github.com:Tuesaday-15-00-17-00-semestr-work/semester-work-assignment-tuesday-15-00-17-50-konotop-solo.git
-   cd semester-work-assignment-tuesday-15-00-17-50-konotop-solo
+   git clone git@github.com:sappChak/library-management-system.git
+   cd library-management-system
    ```
 
 2. Start the application using Gradle:
