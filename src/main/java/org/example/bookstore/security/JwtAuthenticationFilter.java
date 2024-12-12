@@ -47,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 var userDetails = customUserDetailService.loadUserById(userId);
                 Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();
 
-                logger.debug("User {} with authorities {} authenticated", userDetails.getUsername(),
+                logger.info("User {} with authorities {} authenticated", userDetails.getUsername(),
                         userDetails.getAuthorities());
 
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
