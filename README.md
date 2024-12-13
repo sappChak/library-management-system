@@ -43,29 +43,11 @@ A Spring Boot application providing a RESTful API for managing a library system.
 
 ### Option 1: Using Docker
 
-1. Clone the repository:
-
-   ```bash
-   git clone git@github.com:sappChak/library-management-system.git
-   cd library-management-system
-   ```
-
-2. Build and run the application with Docker:
-
    ```bash
    docker-compose up --build
    ```
 
 ### Option 2: Running Locally Without Docker
-
-1. Clone the repository:
-
-   ```bash
-   git clone git@github.com:sappChak/library-management-system.git
-   cd library-management-system
-   ```
-
-2. Start the application using Gradle:
 
    ```bash
    ./gradlew bootRun
